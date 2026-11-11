@@ -1,0 +1,11 @@
+# Downloaded packages — huge, and anyone can reinstall them with npm install
+node_modules/
+
+# Secret keys — must NEVER go to GitHub
+.env
+.env.local
+.env*.local
+contracts/.env
+
+# Mac system junk
+.DS_Store
