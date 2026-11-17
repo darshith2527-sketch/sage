@@ -9,6 +9,8 @@ export type RuleFinding = {
   explanation: string;
   legalBasis: string;
   excerpt?: string; // the matching text, when the rule found something in the document
+  start?: number; // where the match is in the normalised text, used to merge with AI flags
+  end?: number;
 };
 
 type Rule = {
@@ -23,14 +25,25 @@ type Rule = {
   onlyIf?: RegExp; // for "absent" rules: only check when this IS present
 };
 
+// Verbs that describe working or doing business, used by the non-compete rule.
+const RESTRAINT =
+  "(?:compet\\w*|engage in|work (?:for|with)|be employed|join|provide (?:any |similar |the same )?(?:\\w+ )?services)";
+
 const RULES: Rule[] = [
   {
     id: "non-compete",
     title: "Possible non-compete restriction",
     severity: "high",
     when: "present",
-    pattern:
-      /non[-\s]?compet\w*|shall not[^.]{0,80}(?:compet\w*|engage in|work for|provide (?:similar |the same )?services)[^.]{0,120}(?:after|following|for a period)/i,
+    // Catches "non-compete", and "shall not work for…" with "after/following" on either side of it.
+    pattern: new RegExp(
+      [
+        "non[-\\s]?compet\\w*",
+        `shall not[^.]{0,80}${RESTRAINT}[^.]{0,120}(?:after|following|for a period)`,
+        `(?:after|following)[^.]{0,120}shall not[^.]{0,80}${RESTRAINT}`,
+      ].join("|"),
+      "i",
+    ),
     explanation:
       "Clauses that stop someone from working or doing business after the contract ends are generally void in India. Restrictions during the contract can be valid.",
     legalBasis: "Indian Contract Act, 1872, s. 27",
@@ -61,7 +74,7 @@ const RULES: Rule[] = [
     when: "present",
     pattern: /terminat\w*[^.]{0,100}(?:at any time|without (?:any )?(?:prior )?(?:notice|cause|reason))/i,
     explanation:
-      "Check whether this right is mutual, and whether work already done must still be paid for when the contract is ended.",
+      "Check whether both sides have the same right, with the same notice, and whether money already earned or paid must still be settled when the agreement ends.",
     legalBasis: "Indian Contract Act, 1872, s. 70 (payment for benefits received)",
   },
   {
@@ -95,7 +108,8 @@ const RULES: Rule[] = [
   },
 ];
 
-// Runs every rule over the document text.
+// Runs every rule over the document text. Pass normalised text (see normalise())
+// so positions line up with the AI quotes.
 export function runRules(text: string): RuleFinding[] {
   const findings: RuleFinding[] = [];
   for (const rule of RULES) {
@@ -109,7 +123,13 @@ export function runRules(text: string): RuleFinding[] {
       severity: rule.severity,
       explanation: rule.explanation,
       legalBasis: rule.legalBasis,
-      excerpt: rule.when === "present" && match ? excerptAround(text, match.index ?? 0, match[0].length) : undefined,
+      ...(rule.when === "present" && match
+        ? {
+            excerpt: excerptAround(text, match.index ?? 0, match[0].length),
+            start: match.index ?? 0,
+            end: (match.index ?? 0) + match[0].length,
+          }
+        : {}),
     });
   }
   return findings;

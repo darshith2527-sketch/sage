@@ -1,12 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { Risk } from "@/review/analysis";
 import type { RuleFinding } from "@/review/rules";
 import { SAMPLE_AGREEMENT, SAMPLE_SIDE } from "@/review/sample";
 
 type ReviewResult = {
+  source: string;
+  firstLine: string;
   documentType: string;
   summary: string;
   risks: Risk[];
@@ -37,9 +39,28 @@ export default function ReviewClient() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<ReviewResult | null>(null);
+  // The file input keeps its own value, so it needs a ref to be cleared.
+  const fileInput = useRef<HTMLInputElement>(null);
+  const resultRef = useRef<HTMLDivElement>(null);
+
+  // Bring a new result into view, so it's clear the review finished.
+  useEffect(() => {
+    if (result) resultRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [result]);
+
+  function clearAll() {
+    setFile(null);
+    setText("");
+    setSide("");
+    setResult(null);
+    setError(null);
+    if (fileInput.current) fileInput.current.value = "";
+  }
 
   function loadSample() {
     setFile(null);
+    setResult(null);
+    if (fileInput.current) fileInput.current.value = "";
     setText(SAMPLE_AGREEMENT);
     setSide(SAMPLE_SIDE);
   }
@@ -89,6 +110,7 @@ export default function ReviewClient() {
             </label>
             <input
               id="file"
+              ref={fileInput}
               type="file"
               accept=".pdf,.docx,.txt,application/pdf,text/plain"
               onChange={(e) => setFile(e.target.files?.[0] ?? null)}
@@ -109,9 +131,14 @@ export default function ReviewClient() {
               placeholder="Paste the agreement here"
               className="mt-2 w-full rounded-lg border border-zinc-300 p-3 text-sm disabled:bg-zinc-100"
             />
-            <button type="button" onClick={loadSample} className="mt-1 text-sm text-blue-600 hover:underline">
-              Try a sample one-sided agreement
-            </button>
+            <div className="mt-1 flex gap-4">
+              <button type="button" onClick={loadSample} className="text-sm text-blue-600 hover:underline">
+                Try a sample one-sided agreement
+              </button>
+              <button type="button" onClick={clearAll} className="text-sm text-zinc-500 hover:underline">
+                Clear
+              </button>
+            </div>
           </div>
 
           <div>
@@ -138,7 +165,9 @@ export default function ReviewClient() {
           {error && <p className="text-sm text-red-700">{error}</p>}
         </section>
 
-        {result && <ReviewView result={result} />}
+        <div ref={resultRef} className="scroll-mt-4">
+          {result && <ReviewView result={result} />}
+        </div>
 
         <p className="mt-10 text-xs text-zinc-500">
           Sage is not a law firm and doesn&apos;t give legal advice. Have a lawyer review important agreements.
@@ -152,6 +181,9 @@ function ReviewView({ result }: { result: ReviewResult }) {
   return (
     <section className="mt-8 space-y-6" data-testid="review-result">
       <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
+        <p className="mb-3 truncate text-xs text-zinc-500" title={result.firstLine}>
+          Reviewed: {result.source} — “{result.firstLine}”
+        </p>
         <p className="text-sm font-semibold uppercase tracking-wide text-zinc-500">{result.documentType}</p>
         <p className="mt-2">{result.summary}</p>
         {result.truncated && (
@@ -181,6 +213,11 @@ function ReviewView({ result }: { result: ReviewResult }) {
               <p className="mt-2 text-sm text-green-800">
                 <strong>Ask for:</strong> {risk.suggestion}
               </p>
+              {risk.confirmedBy?.map((c) => (
+                <p key={c.title} className="mt-3 inline-block rounded-lg bg-blue-50 px-2 py-1 text-xs text-blue-800">
+                  ✓ Also caught by Sage&apos;s Indian-law check: {c.title} ({c.legalBasis})
+                </p>
+              ))}
             </article>
           ))}
         </div>
@@ -188,7 +225,9 @@ function ReviewView({ result }: { result: ReviewResult }) {
 
       {result.ruleFindings.length > 0 && (
         <div>
-          <h2 className="text-xl font-semibold">Indian-law checks</h2>
+          <h2 className="text-xl font-semibold">
+            {result.risks.some((r) => r.confirmedBy) ? "More Indian-law checks" : "Indian-law checks"}
+          </h2>
           <p className="mt-1 text-sm text-zinc-500">Fixed rules run by code, not AI. A match means “look closer”.</p>
           <div className="mt-4 space-y-3">
             {result.ruleFindings.map((f) => (

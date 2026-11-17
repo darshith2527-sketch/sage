@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { normalise } from "./extract";
+import type { RuleFinding } from "./rules";
 
 // What the AI must return. Every risk must quote the document word for word,
 // so code can check that the AI is pointing at real text.
@@ -31,7 +32,12 @@ export const reviewSchema = z.object({
 });
 
 export type Review = z.infer<typeof reviewSchema>;
-export type Risk = Review["risks"][number] & { verified: boolean };
+export type Risk = Review["risks"][number] & {
+  verified: boolean;
+  start?: number; // where the quote is in the normalised text
+  end?: number;
+  confirmedBy?: { title: string; legalBasis: string }[]; // code checks that flagged the same clause
+};
 
 export const REVIEW_INSTRUCTIONS = `You review agreements for people in India who are not lawyers.
 
@@ -40,16 +46,44 @@ Read the agreement and identify what could hurt the user, from the user's side o
 - For every risk, "quote" must be copied EXACTLY, word for word, from the agreement. Never paraphrase, summarise or join separate sentences in a quote.
 - Only report real issues in this document. Don't invent problems, and don't repeat the same issue twice.
 - Use plain English. Be balanced: if a clause is standard and fair, don't flag it.
+- A risk is a clause that clearly disadvantages the user. A normal, fair clause that is only missing a detail (e.g. confidentiality without a definition) is not a risk: mention the missing detail under "missing" instead.
+- Use "high" only for clauses that could cost the user a lot of money, rights or freedom. Use "low" sparingly.
 - You give general information, not legal advice.`;
 
-// Code check: keep only risks whose quote really appears in the document.
+// Lower-cases and straightens quotes/dashes without changing the text's length,
+// so a position found in the result is the same position in the normalised text.
+function simplify(s: string): string {
+  return s.toLowerCase().replace(/[‘’]/g, "'").replace(/[“”]/g, '"').replace(/[–—]/g, "-");
+}
+
+// Code check: a risk is verified only if its quote really appears in the document.
 // Matching ignores spacing, line breaks, letter case and curly vs straight quotes.
-export function verifyRisks(documentText: string, risks: Review["risks"]): Risk[] {
-  const simplify = (s: string) =>
-    normalise(s).toLowerCase().replace(/[‘’]/g, "'").replace(/[“”]/g, '"').replace(/[–—]/g, "-");
-  const doc = simplify(documentText);
+// `doc` must be normalised text (see normalise()).
+export function verifyRisks(doc: string, risks: Review["risks"]): Risk[] {
+  const haystack = simplify(doc);
   return risks.map((risk) => {
-    const quote = simplify(risk.quote).replace(/^[."'…\s]+|[."'…\s]+$/g, "");
-    return { ...risk, verified: quote.length >= 8 && doc.includes(quote) };
+    const quote = simplify(normalise(risk.quote)).replace(/^[."'…\s]+|[."'…\s]+$/g, "");
+    const start = quote.length >= 8 ? haystack.indexOf(quote) : -1;
+    return start === -1 ? { ...risk, verified: false } : { ...risk, verified: true, start, end: start + quote.length };
   });
+}
+
+// When a code check found the same clause the AI flagged, show it as a confirmation
+// on the AI's card instead of a second card. Returns the code checks left over.
+export function mergeFindings(risks: Risk[], findings: RuleFinding[]): RuleFinding[] {
+  const rest: RuleFinding[] = [];
+  for (const finding of findings) {
+    const match =
+      finding.start === undefined
+        ? undefined
+        : risks.find(
+            (r) => r.verified && r.start !== undefined && r.start < finding.end! && finding.start! < r.end!,
+          );
+    if (match) {
+      match.confirmedBy = [...(match.confirmedBy ?? []), { title: finding.title, legalBasis: finding.legalBasis }];
+    } else {
+      rest.push(finding);
+    }
+  }
+  return rest;
 }
