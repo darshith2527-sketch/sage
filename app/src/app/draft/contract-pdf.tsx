@@ -1,5 +1,5 @@
 import { Document, Font, Page, StyleSheet, Text, View } from "@react-pdf/renderer";
-import type { Contract } from "@/lib/draft";
+import type { Contract } from "@/contracts/engine";
 
 // Noto Sans, merged so it includes the ₹ sign (the built-in PDF fonts don't have it).
 Font.register({
@@ -59,10 +59,7 @@ export default function ContractPdf({ contract }: { contract: Contract }) {
         ))}
 
         <View style={styles.signatures} wrap={false}>
-          {[
-            { role: "Client", name: contract.clientName },
-            { role: "Freelancer", name: contract.freelancerName },
-          ].map((party) => (
+          {contract.parties.map((party) => (
             <View key={party.role} style={styles.signBox}>
               <View style={styles.signLine} />
               <Text>Signed by the {party.role}</Text>

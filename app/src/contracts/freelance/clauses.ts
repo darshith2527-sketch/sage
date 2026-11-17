@@ -1,4 +1,4 @@
-import type { Clause } from "./types";
+import type { Clause } from "../types";
 
 // Clause library for the Freelance Service Agreement (FSA).
 // Written for Sage against Indian law. Not legal advice: these should be reviewed
@@ -78,7 +78,7 @@ Anything not described above is outside the scope of this Agreement and will be 
     category: "revisions",
     title: "Revisions",
     include: "standard",
-    text: `The Fees include {{revisionRounds}} round(s) of revisions to the Deliverables. A round of revisions means one consolidated set of feedback from the Client on a Deliverable. Further revisions will be charged at a fee agreed in writing before the work begins.`,
+    text: `The Fees include {{revisionRoundsText}} of revisions to the Deliverables. A round of revisions means one consolidated set of feedback from the Client on a Deliverable. Further revisions will be charged at a fee agreed in writing before the work begins.`,
     plainExplanation:
       "How many rounds of changes are included in the price. More rounds cost extra, agreed in advance.",
     riskNotes:
