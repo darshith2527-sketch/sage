@@ -29,6 +29,20 @@ export default function Home() {
           ))}
         </div>
 
+        <h2 className="mt-12 text-sm font-semibold uppercase tracking-wide text-zinc-500">
+          Already have an agreement?
+        </h2>
+        <Link
+          href="/review"
+          className="mt-4 block rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm transition hover:border-blue-400 hover:shadow-md"
+        >
+          <h3 className="font-semibold">Review an agreement</h3>
+          <p className="mt-1 text-sm text-zinc-600">
+            Upload any agreement (PDF, Word or text). Sage flags risky and one-sided clauses and explains why.
+          </p>
+          <p className="mt-4 text-sm font-medium text-blue-600">Review →</p>
+        </Link>
+
         <p className="mt-12 text-xs text-zinc-500">
           Sage is not a law firm and doesn&apos;t give legal advice. Have a lawyer review important agreements.
         </p>
