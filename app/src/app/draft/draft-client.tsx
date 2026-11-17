@@ -39,7 +39,10 @@ export default function DraftClient({ typeId }: { typeId: string }) {
 
   const { missing, problems } = checkDeal(type, deal);
   const requiredCount = type.fields.filter((f) => f.required).length;
-  const optionalClauses = type.clauses.filter((c) => c.include === "optional");
+  // Only offer optional clauses that fit this deal (e.g. escrow only for milestone payments).
+  const optionalClauses = type.clauses.filter(
+    (c) => c.include === "optional" && (!c.onlyIf || deal[c.onlyIf.field] === c.onlyIf.equals),
+  );
 
   // Drafting: which optional clauses are ticked, and the finished contract.
   const [optional, setOptional] = useState<string[]>([]);
