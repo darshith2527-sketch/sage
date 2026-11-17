@@ -4,6 +4,8 @@ import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { checkDeal, emptyDeal, FIELDS, mergeDeal, type Deal, type Milestone } from "@/lib/deal";
+import { OPTIONAL_CLAUSES, type Contract } from "@/lib/draft";
+import ContractView from "./contract-view";
 
 const EXAMPLE =
   "I'm designing a website for Mehta Traders. ₹60,000 in three stages: design, development and launch. Starting 1 December, done by end of January.";
@@ -33,6 +35,31 @@ export default function IntakePage() {
   }, [messages]);
 
   const { missing, problems } = checkDeal(deal);
+
+  // Drafting: which optional clauses are ticked, and the finished contract.
+  const [optional, setOptional] = useState<string[]>([]);
+  const [contract, setContract] = useState<Contract | null>(null);
+  const [drafting, setDrafting] = useState(false);
+  const [draftError, setDraftError] = useState<string | null>(null);
+
+  async function draftContract() {
+    setDrafting(true);
+    setDraftError(null);
+    try {
+      const res = await fetch("/api/draft", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ deal, optional }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "Drafting failed.");
+      setContract(data.contract);
+    } catch (e) {
+      setDraftError(e instanceof Error ? e.message : "Drafting failed.");
+    } finally {
+      setDrafting(false);
+    }
+  }
 
   // Keep the chat scrolled to the newest message.
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -146,12 +173,41 @@ export default function IntakePage() {
           )}
 
           {missing.length === 0 && problems.length === 0 && (
-            <p className="mt-4 rounded-lg bg-green-50 p-3 text-sm text-green-800">
-              All details collected. Next step: drafting the contract.
-            </p>
+            <div className="mt-4 space-y-3 rounded-lg bg-green-50 p-3 text-sm text-green-900">
+              <p>All details collected. Add any optional clauses, then draft.</p>
+              {OPTIONAL_CLAUSES.map((c) => (
+                <label key={c.id} className="flex items-start gap-2">
+                  <input
+                    type="checkbox"
+                    className="mt-1"
+                    checked={optional.includes(c.id)}
+                    onChange={(e) =>
+                      setOptional(
+                        e.target.checked
+                          ? [...optional, c.id]
+                          : optional.filter((id) => id !== c.id),
+                      )
+                    }
+                  />
+                  <span>
+                    <span className="font-medium">{c.title}</span>
+                    <span className="block text-xs text-green-800">{c.plainExplanation}</span>
+                  </span>
+                </label>
+              ))}
+              <button
+                onClick={draftContract}
+                disabled={drafting}
+                className="w-full rounded-xl bg-green-700 py-2.5 font-medium text-white disabled:opacity-50"
+              >
+                {drafting ? "Drafting…" : contract ? "Draft again" : "Draft contract"}
+              </button>
+              {draftError && <p className="text-red-700">{draftError}</p>}
+            </div>
           )}
         </aside>
       </div>
+      {contract && <ContractView contract={contract} />}
     </main>
   );
 }
