@@ -1,76 +1,73 @@
 import { generateText, Output } from "ai";
 import { openai } from "@ai-sdk/openai";
 import { z } from "zod";
-import { checkDeal, dealSchema } from "@/lib/deal";
-import { assembleContract, checkContract, OPTIONAL_CLAUSES } from "@/lib/draft";
+import { assembleContract, checkContract, checkDeal } from "@/contracts/engine";
+import { getContractType } from "@/contracts/registry";
 
 export const maxDuration = 30;
 
-// What the browser sends: the filled deal, plus which optional clauses to add.
+// What the browser sends: the agreement type, the filled deal, and ticked optional clauses.
 const requestSchema = z.object({
-  deal: dealSchema,
+  type: z.string(),
+  deal: z.record(z.string(), z.unknown()),
   optional: z.array(z.string()),
 });
 
-// The AI's only job: turn the user's scope into a clear list of deliverables.
-const scopeSchema = z.object({
-  deliverables: z
-    .array(z.string())
-    .describe("Each deliverable as one short, specific line"),
-});
-
 export async function POST(req: Request) {
-  // 1. Check the request has the right shape.
+  // 1. Check the request has the right shape and the type exists.
   const parsed = requestSchema.safeParse(await req.json());
-  if (!parsed.success) {
+  const type = parsed.success ? getContractType(parsed.data.type) : undefined;
+  if (!parsed.success || !type) {
     return Response.json({ error: "Invalid request." }, { status: 400 });
   }
-  const { deal, optional } = parsed.data;
 
-  // 2. Refuse to draft until the deal is complete and consistent.
-  const { missing, problems } = checkDeal(deal);
+  // 2. Check the deal matches this type's fields exactly.
+  const dealParsed = type.schema.safeParse(parsed.data.deal);
+  if (!dealParsed.success) {
+    return Response.json({ error: "The deal details are in the wrong format." }, { status: 400 });
+  }
+  const deal = dealParsed.data;
+
+  // 3. Refuse to draft until the deal is complete and consistent.
+  const { missing, problems } = checkDeal(type, deal);
   if (missing.length > 0 || problems.length > 0) {
-    return Response.json(
-      { error: "The deal isn't complete yet.", missing, problems },
-      { status: 422 },
-    );
+    return Response.json({ error: "The deal isn't complete yet.", missing, problems }, { status: 422 });
   }
 
-  // 3. Only accept optional clauses that really exist.
-  const validOptional = optional.filter((id) => OPTIONAL_CLAUSES.some((c) => c.id === id));
+  // 4. Only accept optional clauses this type really has.
+  const optional = parsed.data.optional.filter((id) =>
+    type.clauses.some((c) => c.id === id && c.include === "optional"),
+  );
 
-  // 4. Ask the AI to turn the scope into clear deliverables.
-  //    If anything goes wrong, fall back to the user's own words.
-  let scopeText = deal.scope ?? "";
-  try {
-    const { output } = await generateText({
-      model: openai("gpt-5.4-mini"),
-      output: Output.object({ schema: scopeSchema }),
-      instructions: `You turn a freelancer's description of their work into a clear list of deliverables for a contract.
-Rules:
-- Use only what the description says. Never add work, quantities, technologies or deadlines that aren't mentioned.
-- 2 to 6 deliverables, each one short and specific.
-- Plain English, no legal language, no prices or dates.`,
-      prompt: `Work description: ${deal.scope}\nMilestones: ${(deal.milestones ?? [])
-        .map((m) => m.title)
-        .join(", ")}`,
-    });
-    if (output.deliverables.length > 0) {
-      scopeText = output.deliverables.map((d) => `• ${d}`).join("\n");
+  // 5. The one AI step, if this type has one (e.g. scope → deliverables).
+  //    If anything goes wrong, the user's own words are used instead.
+  const overrides: Record<string, string> = {};
+  if (type.refine) {
+    try {
+      const { output } = await generateText({
+        model: openai("gpt-5.4-mini"),
+        output: Output.object({
+          schema: z.object({
+            items: z.array(z.string()).describe("Each item as one short, specific line"),
+          }),
+        }),
+        instructions: type.refine.instructions,
+        prompt: type.refine.prompt(deal),
+      });
+      if (output.items.length > 0) {
+        overrides[type.refine.placeholder] = output.items.map((item) => `• ${item}`).join("\n");
+      }
+    } catch (error) {
+      console.error("Refine step failed, using the original text:", error);
     }
-  } catch (error) {
-    console.error("Scope rewrite failed, using the original scope:", error);
   }
 
-  // 5. Assemble the contract from the clause library, then check it in code.
+  // 6. Assemble from the clause library, then check the result in code.
   const today = new Date().toISOString().slice(0, 10);
-  const contract = assembleContract(deal, scopeText, validOptional, today);
-  const contractProblems = checkContract(contract);
+  const contract = assembleContract(type, deal, optional, today, overrides);
+  const contractProblems = checkContract(type, contract);
   if (contractProblems.length > 0) {
-    return Response.json(
-      { error: "The contract failed its checks.", problems: contractProblems },
-      { status: 500 },
-    );
+    return Response.json({ error: "The contract failed its checks.", problems: contractProblems }, { status: 500 });
   }
 
   return Response.json({ contract });

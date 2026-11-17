@@ -1,18 +1,20 @@
-// Checks the clause library for mistakes. Run with: npm run check:clauses
+// Checks every agreement type's clause library for mistakes. Run with: npm run check:clauses
 // Exits with an error if anything is wrong, so problems can't slip through.
 
-import { freelanceClauses } from "../src/clauses/freelance";
-import { PLACEHOLDERS, placeholdersIn, type Clause } from "../src/clauses/types";
+import { CONTRACT_TYPES } from "../src/contracts/registry";
+import { placeholdersIn, type ContractType } from "../src/contracts/types";
 
 const errors: string[] = [];
 const warnings: string[] = [];
 
-function check(clauses: Clause[], prefix: string) {
+function check(type: ContractType) {
+  const { clauses, placeholders, idPrefix: prefix } = type;
+  const fieldKeys = new Set(type.fields.map((f) => f.key));
   const seenIds = new Set<string>();
   const usedPlaceholders = new Set<string>();
 
   for (const clause of clauses) {
-    const where = clause.id || "(clause with no id)";
+    const where = `${type.id} ${clause.id || "(clause with no id)"}`;
 
     // 1. IDs: right format, no duplicates.
     if (!new RegExp(`^${prefix}-[A-Z]+-\\d{2}$`).test(clause.id)) {
@@ -26,17 +28,16 @@ function check(clauses: Clause[], prefix: string) {
       if (!clause[field].trim()) errors.push(`${where}: "${field}" is empty`);
     }
 
-    // 3. Every placeholder must be registered in PLACEHOLDERS.
+    // 3. Every placeholder must be registered for this type.
     for (const name of placeholdersIn(clause.text)) {
       usedPlaceholders.add(name);
-      if (!(name in PLACEHOLDERS)) {
-        errors.push(`${where}: unknown placeholder {{${name}}}. Add it to PLACEHOLDERS or fix the spelling.`);
+      if (!(name in placeholders)) {
+        errors.push(`${where}: unknown placeholder {{${name}}}. Add it to placeholders or fix the spelling.`);
       }
     }
 
     // 4. Catch broken placeholder syntax, like {name} or {{name} or {{ name }}.
-    const leftover = clause.text.replace(/\{\{\w+\}\}/g, "");
-    if (/[{}]/.test(leftover)) {
+    if (/[{}]/.test(clause.text.replace(/\{\{\w+\}\}/g, ""))) {
       errors.push(`${where}: broken placeholder brackets. Use exactly {{name}}.`);
     }
 
@@ -56,26 +57,32 @@ function check(clauses: Clause[], prefix: string) {
         errors.push(`${where}: refers to the "${match[1]}" clause, which doesn't exist.`);
       }
     }
+
+    // 8. "onlyIf" must point to a real field.
+    if (clause.onlyIf && !fieldKeys.has(clause.onlyIf.field)) {
+      errors.push(`${where}: onlyIf uses unknown field "${clause.onlyIf.field}".`);
+    }
   }
 
-  // 8. The contract type needs at least one required clause.
-  if (!clauses.some((c) => c.include === "required")) {
-    errors.push(`${prefix}: no required clauses`);
+  // 9. Placeholders filled from the deal must point to a real field.
+  for (const [name, source] of Object.entries(placeholders)) {
+    if (source.from === "deal" && !fieldKeys.has(source.field)) {
+      errors.push(`${type.id}: placeholder {{${name}}} uses unknown field "${source.field}".`);
+    }
+    if (!usedPlaceholders.has(name)) warnings.push(`${type.id}: placeholder {{${name}}} is never used`);
   }
 
-  // 9. Registered placeholders nobody uses are probably leftovers.
-  for (const name of Object.keys(PLACEHOLDERS)) {
-    if (!usedPlaceholders.has(name)) warnings.push(`placeholder {{${name}}} is never used`);
-  }
+  // 10. Every type needs at least one required clause.
+  if (!clauses.some((c) => c.include === "required")) errors.push(`${type.id}: no required clauses`);
 
   const counts = { required: 0, standard: 0, optional: 0 };
   for (const c of clauses) counts[c.include]++;
   console.log(
-    `${prefix}: ${clauses.length} clauses (${counts.required} required, ${counts.standard} standard, ${counts.optional} optional)`,
+    `${type.name}: ${clauses.length} clauses (${counts.required} required, ${counts.standard} standard, ${counts.optional} optional)`,
   );
 }
 
-check(freelanceClauses, "FSA");
+for (const type of CONTRACT_TYPES) check(type);
 
 for (const w of warnings) console.log(`⚠  ${w}`);
 for (const e of errors) console.log(`✗  ${e}`);

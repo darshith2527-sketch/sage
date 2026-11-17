@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { contractFileName, type Contract } from "@/lib/draft";
+import { contractFileName, type Contract } from "@/contracts/engine";
 
 // Shows the finished contract, with a plain-English explanation for every clause.
 export default function ContractView({ contract }: { contract: Contract }) {

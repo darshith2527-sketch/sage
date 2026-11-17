@@ -7,7 +7,7 @@ import {
   Paragraph,
   TextRun,
 } from "docx";
-import type { Contract } from "@/lib/draft";
+import type { Contract } from "@/contracts/engine";
 
 const FONT = "Calibri"; // Word's default; includes the ₹ sign on Windows and Mac
 
@@ -49,10 +49,7 @@ export async function contractToDocx(contract: Contract): Promise<Blob> {
   }
 
   // Signature block for both parties.
-  for (const party of [
-    { role: "Client", name: contract.clientName },
-    { role: "Freelancer", name: contract.freelancerName },
-  ]) {
+  for (const party of contract.parties) {
     body.push(
       new Paragraph({ spacing: { before: 480 }, children: [new TextRun({ text: "______________________________", font: FONT })] }),
       new Paragraph({ children: [new TextRun({ text: `Signed by the ${party.role}`, font: FONT })] }),
