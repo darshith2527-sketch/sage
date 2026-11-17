@@ -12,7 +12,9 @@
   "dependencies": {
     "@ai-sdk/openai": "^4.0.114",
     "@ai-sdk/react": "^4.0.177",
+    "@react-pdf/renderer": "^4.9.0",
     "ai": "^7.0.169",
+    "docx": "^9.15.4",
     "next": "16.4.6",
     "react": "19.3.0",
     "react-dom": "19.3.0",

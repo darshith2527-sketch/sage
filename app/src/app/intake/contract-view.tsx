@@ -1,11 +1,34 @@
 "use client";
 
 import { useState } from "react";
-import type { Contract } from "@/lib/draft";
+import { contractFileName, type Contract } from "@/lib/draft";
 
 // Shows the finished contract, with a plain-English explanation for every clause.
 export default function ContractView({ contract }: { contract: Contract }) {
   const [openId, setOpenId] = useState<string | null>(null);
+  const [exporting, setExporting] = useState<"pdf" | "docx" | null>(null);
+
+  // The PDF and Word libraries are large, so they're only loaded when a button is clicked.
+  async function download(kind: "pdf" | "docx") {
+    setExporting(kind);
+    try {
+      let blob: Blob;
+      if (kind === "pdf") {
+        const { pdf } = await import("@react-pdf/renderer");
+        const { default: ContractPdf } = await import("./contract-pdf");
+        blob = await pdf(<ContractPdf contract={contract} />).toBlob();
+      } else {
+        const { contractToDocx } = await import("@/lib/export-docx");
+        blob = await contractToDocx(contract);
+      }
+      saveFile(blob, `${contractFileName(contract)}.${kind}`);
+    } catch (error) {
+      console.error(error);
+      alert("Sorry, the download failed. Please try again.");
+    } finally {
+      setExporting(null);
+    }
+  }
 
   return (
     <section className="mx-auto max-w-6xl px-4 pb-16 md:px-8">
@@ -14,6 +37,23 @@ export default function ContractView({ contract }: { contract: Contract }) {
         <p className="mt-1 text-center text-sm text-zinc-500">
           Built from Sage&apos;s clause library. Click any clause for a plain-English explanation.
         </p>
+
+        <div className="mt-4 flex justify-center gap-3">
+          <button
+            onClick={() => download("pdf")}
+            disabled={exporting !== null}
+            className="rounded-xl bg-zinc-900 px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
+          >
+            {exporting === "pdf" ? "Preparing…" : "Download PDF"}
+          </button>
+          <button
+            onClick={() => download("docx")}
+            disabled={exporting !== null}
+            className="rounded-xl border border-zinc-300 px-4 py-2 text-sm font-medium disabled:opacity-50"
+          >
+            {exporting === "docx" ? "Preparing…" : "Download Word"}
+          </button>
+        </div>
 
         {contract.blanks.length > 0 && (
           <div className="mt-6 rounded-lg bg-amber-50 p-4 text-sm text-amber-900">
@@ -75,4 +115,15 @@ function highlightBlanks(text: string) {
       part
     ),
   );
+}
+
+// Makes the browser download a file we created in memory.
+function saveFile(blob: Blob, fileName: string) {
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = fileName;
+  link.click();
+  // Wait before cleaning up; Safari can cancel the download if this happens instantly.
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
 }

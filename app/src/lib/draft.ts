@@ -13,6 +13,8 @@ export type ContractClause = {
 
 export type Contract = {
   title: string;
+  clientName: string;
+  freelancerName: string;
   clauses: ContractClause[];
   blanks: string[]; // details the user must fill in by hand before signing
 };
@@ -99,7 +101,13 @@ export function assembleContract(
     .map((source) => source.description)
     .filter((description) => clauses.some((c) => c.text.includes(blankMarker(description))));
 
-  return { title: "Freelance Service Agreement", clauses, blanks };
+  return {
+    title: "Freelance Service Agreement",
+    clientName: deal.clientName ?? "",
+    freelancerName: deal.freelancerName ?? "",
+    clauses,
+    blanks,
+  };
 }
 
 // Step 5: code checks on the finished contract.
@@ -120,4 +128,10 @@ export function checkContract(contract: Contract): string[] {
     }
   }
   return problems;
+}
+
+// "Freelance-Agreement-Mehta-Traders"
+export function contractFileName(contract: Contract): string {
+  const client = contract.clientName.replace(/[^a-zA-Z0-9]+/g, "-").replace(/^-|-$/g, "");
+  return `Freelance-Agreement${client ? `-${client}` : ""}`;
 }
