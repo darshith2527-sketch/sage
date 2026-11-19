@@ -1,0 +1,36 @@
+{
+  "id": "seatbelt-violation",
+  "title": "Fined for not wearing a seat belt",
+  "category": "traffic",
+  "triggers": [
+    "seat belt challan",
+    "fined because passenger not wearing seatbelt",
+    "seatbelt nahi lagaya tha"
+  ],
+  "rights": [
+    {
+      "act": "Motor Vehicles Act, 1988",
+      "section": "s.194B(1)",
+      "plain_explanation": "Driving without a seat belt, or carrying passengers who aren't wearing one, is fined ₹1,000.",
+      "source_url": "https://indiacode.nic.in/bitstream/123456789/1798/1/A1988-59.pdf"
+    }
+  ],
+  "do_now": [
+    "Accept the challan; this one is lawful.",
+    "Ask for the official e-challan or a receipt.",
+    "Pay through the official portal."
+  ],
+  "user_at_fault_cases": [
+    "Driving or carrying passengers without seat belts is against the law, so the ₹1,000 fine is legal."
+  ],
+  "escalation": [
+    {
+      "label": "Pay the challan officially",
+      "detail": "Pay on the Virtual Courts portal or the method on the challan.",
+      "url": "https://vcourts.gov.in"
+    }
+  ],
+  "helplines": [],
+  "last_verified": "2026-11-19",
+  "emergency": false
+}

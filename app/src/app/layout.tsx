@@ -1,11 +1,10 @@
 import type { Metadata, Viewport } from "next";
 // Fonts are bundled with the site (no request to Google Fonts).
-import "@fontsource/barlow-condensed/400.css";
-import "@fontsource/barlow-condensed/500.css";
-import "@fontsource/barlow-condensed/600.css";
-import "@fontsource-variable/mulish/index.css";
+import "@fontsource-variable/big-shoulders-display";
+import "@fontsource-variable/familjen-grotesk";
+import "@fontsource/mr-dafoe";
 import "./globals.css";
-import { Backdrop, SiteNav } from "@/components/site-chrome";
+import { Backdrop, SiteFooter, SiteNav } from "@/components/site-chrome";
 
 export const metadata: Metadata = {
   title: "Sage — agreements you understand",
@@ -23,7 +22,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="relative min-h-full">
         <Backdrop />
         <SiteNav />
-        <div className="relative z-10 flex min-h-full flex-col">{children}</div>
+        <div className="relative z-10 flex min-h-full flex-col">
+          {children}
+          <SiteFooter />
+        </div>
       </body>
     </html>
   );

@@ -3,6 +3,7 @@ import { openai } from "@ai-sdk/openai";
 import { z } from "zod";
 import { assembleContract, checkContract, checkDeal } from "@/contracts/engine";
 import { getContractType } from "@/contracts/registry";
+import { rateLimit } from "@/lib/rate-limit";
 
 export const maxDuration = 30;
 
@@ -14,6 +15,10 @@ const requestSchema = z.object({
 });
 
 export async function POST(req: Request) {
+  // Per-IP limit, so nobody can drain the AI credit.
+  const limited = await rateLimit(req, "draft");
+  if (limited) return limited;
+
   // 1. Check the request has the right shape and the type exists.
   const parsed = requestSchema.safeParse(await req.json());
   const type = parsed.success ? getContractType(parsed.data.type) : undefined;

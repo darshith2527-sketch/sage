@@ -3,11 +3,16 @@ import { openai } from "@ai-sdk/openai";
 import { mergeFindings, REVIEW_INSTRUCTIONS, reviewSchema, verifyRisks } from "@/review/analysis";
 import { extractText, MAX_FILE_BYTES, MAX_TEXT_CHARS, normalise } from "@/review/extract";
 import { runRules } from "@/review/rules";
+import { rateLimit } from "@/lib/rate-limit";
 
 // Reading a whole agreement takes longer than a chat reply.
 export const maxDuration = 60;
 
 export async function POST(req: Request) {
+  // Per-IP limit, so nobody can drain the AI credit.
+  const limited = await rateLimit(req, "review");
+  if (limited) return limited;
+
   // 1. Read the form: either an uploaded file or pasted text, plus the user's side.
   const form = await req.formData();
   const file = form.get("file");

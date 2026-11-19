@@ -88,7 +88,7 @@ export default function DraftClient({ typeId }: { typeId: string }) {
         <Link href="/#draft" className="kicker hover:text-ink">
           ← All agreements
         </Link>
-        <h1 className="display mt-2 text-4xl text-ink md:text-5xl">{type.name}</h1>
+        <h1 className="display extrude mt-2 text-5xl font-[800] text-ink md:text-6xl">{type.name}</h1>
         <p className="mt-2 max-w-2xl text-ink-muted">
           Tell Sage about the deal the way you&apos;d tell a friend. It will ask about anything missing.
         </p>

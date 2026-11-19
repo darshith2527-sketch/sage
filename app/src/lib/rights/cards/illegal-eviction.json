@@ -1,0 +1,56 @@
+{
+  "id": "illegal-eviction",
+  "title": "Landlord is forcing me out without a court order",
+  "category": "tenant",
+  "triggers": [
+    "landlord changed the locks",
+    "owner threw my things out",
+    "landlord cutting electricity to make me leave",
+    "zabardasti ghar khali karwa raha hai"
+  ],
+  "rights": [
+    {
+      "act": "Specific Relief Act, 1963",
+      "section": "s.6",
+      "plain_explanation": "If you're thrown out of a property without your consent and without due process of law, you can sue to get possession back within six months.",
+      "source_url": "https://delhihighcourt.nic.in/app/showFileJudgment/59513012025CR2112024_125143.pdf"
+    }
+  ],
+  "do_now": [
+    "Don't leave voluntarily or hand over keys under pressure.",
+    "If there's force or threats, call 112.",
+    "Record everything: photos, videos, messages, witnesses.",
+    "Reply in writing that you'll only leave through due legal process."
+  ],
+  "user_at_fault_cases": [
+    "If your tenancy has lawfully ended or a court has ordered eviction, you'll have to leave. Due process still applies to how it's done."
+  ],
+  "escalation": [
+    {
+      "label": "Police",
+      "detail": "Report threats or force at the police station."
+    },
+    {
+      "label": "Civil court",
+      "detail": "File a suit within six months of being dispossessed."
+    },
+    {
+      "label": "Free legal aid",
+      "detail": "Call NALSA on 15100 or visit your District Legal Services Authority (DLSA) at the district court. Women, children, people in custody and people below the income limit get a free lawyer.",
+      "url": "https://nalsa.gov.in/services/legal-aid/eligibility"
+    }
+  ],
+  "helplines": [
+    {
+      "name": "Emergency (police, fire, ambulance)",
+      "number": "112"
+    },
+    {
+      "name": "NALSA free legal aid",
+      "number": "15100"
+    }
+  ],
+  "notes": "State rent laws add more protections; a legal aid lawyer can tell you which apply.",
+  "last_verified": "2026-11-19",
+  "emergency": false
+}

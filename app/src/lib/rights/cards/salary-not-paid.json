@@ -1,0 +1,54 @@
+{
+  "id": "salary-not-paid",
+  "title": "Employer hasn't paid my salary",
+  "category": "workplace",
+  "triggers": [
+    "salary not paid for two months",
+    "company not giving my final settlement",
+    "employer holding my wages",
+    "tankhwah nahi mili",
+    "resigned but no full and final"
+  ],
+  "rights": [
+    {
+      "act": "Code on Wages, 2019",
+      "section": "s.17",
+      "plain_explanation": "Monthly wages must be paid before the 7th of the next month. If you resign or are removed, dismissed or retrenched, your wages are due within two working days.",
+      "source_url": "https://www.indiacode.nic.in/bitstream/123456789/15793/1/aA2019-29.pdf"
+    },
+    {
+      "act": "Code on Wages, 2019",
+      "section": "s.45",
+      "plain_explanation": "You can file a claim for unpaid wages with the authority appointed by the government, within three years. It can order compensation of up to ten times the amount.",
+      "source_url": "https://www.indiacode.nic.in/bitstream/123456789/15793/1/aA2019-29.pdf"
+    }
+  ],
+  "do_now": [
+    "Ask HR in writing for the dues and a date.",
+    "Keep proof: offer letter, salary slips, bank statements, attendance or emails.",
+    "Keep working records safe before you leave the job."
+  ],
+  "user_at_fault_cases": [
+    "Lawful deductions (tax, PF, notice-period shortfall as per your contract) aren't unpaid wages."
+  ],
+  "escalation": [
+    {
+      "label": "Labour authority",
+      "detail": "File a wage claim with your state's labour department or the claims authority under the Code on Wages."
+    },
+    {
+      "label": "Free legal aid",
+      "detail": "Call NALSA on 15100 or visit your District Legal Services Authority (DLSA) at the district court. Women, children, people in custody and people below the income limit get a free lawyer.",
+      "url": "https://nalsa.gov.in/services/legal-aid/eligibility"
+    }
+  ],
+  "helplines": [
+    {
+      "name": "NALSA free legal aid",
+      "number": "15100"
+    }
+  ],
+  "notes": "The four labour codes took effect on 21 November 2025; during the changeover some older rules still apply.",
+  "last_verified": "2026-11-19",
+  "emergency": false
+}
