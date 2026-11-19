@@ -161,7 +161,7 @@ export default function DraftCarousel({ cards }: { cards: Card[] }) {
           <p className="kicker">01 / Draft</p>
           <h2 className="display extrude mt-3 text-5xl font-[800] text-ink md:text-6xl">
             Describe the deal. Get the{" "}
-            <span className="script ml-1 inline-block -rotate-3 text-[1.25em]">agreement.</span>
+            <span className="script ml-1 inline-block text-[1.25em]">agreement.</span>
           </h2>
           <p className="mt-3 max-w-xl text-ink-muted">Pick an agreement. Sage asks about anything that&apos;s missing.</p>
         </div>
@@ -231,7 +231,7 @@ export default function DraftCarousel({ cards }: { cards: Card[] }) {
                 aria-label={`Show ${card.name}`}
                 aria-current={i === active}
                 className={`h-1.5 transition-all duration-300 ${
-                  i === active ? "w-8 bg-accent shadow-[0_0_8px_var(--glow)]" : "w-3 bg-line hover:bg-ink-muted"
+                  i === active ? "w-8 bg-gold shadow-[0_0_8px_var(--gold)]" : "w-3 bg-line hover:bg-ink-muted"
                 }`}
               />
             ))}

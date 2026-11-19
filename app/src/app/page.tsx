@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { CONTRACT_TYPES } from "@/contracts/registry";
+import CosmicHero from "@/components/cosmic-hero";
 import DraftCarousel from "@/components/draft-carousel";
-import Intro from "@/components/intro";
 import { Reveal } from "@/components/site-chrome";
 
 const HOW_IT_WORKS = [
@@ -26,35 +26,8 @@ const HOW_IT_WORKS = [
 export default function Home() {
   return (
     <main className="relative">
-      <Intro />
-      {/* ---------- Hero ---------- */}
-      <section className="mx-auto flex min-h-[100svh] max-w-6xl flex-col justify-center px-5 pb-16 pt-28 md:px-8">
-        <div className="max-w-2xl">
-          <p className="kicker">For freelancers, founders &amp; families in India</p>
-          {/* Heavy 3D lettering with a brushed script line across it */}
-          <h1 className="mt-5">
-            <span className="display extrude-xl block text-[clamp(4.4rem,11.5vw,10rem)] font-[900] leading-[0.82] tracking-[0.01em] text-ink">
-              Agreements
-            </span>
-            <span className="script relative z-10 -mt-[0.62em] ml-[1.1em] block -rotate-[6deg] whitespace-nowrap text-[clamp(2.7rem,6.6vw,6.2rem)] leading-[1.15]">
-              you understand
-            </span>
-          </h1>
-          <p className="mt-9 max-w-md text-lg leading-relaxed text-ink-muted">
-            Describe your deal in plain words. Sage builds the agreement from verified clauses and explains
-            every one. Already have an agreement? Sage shows you what could hurt you.
-          </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Link href="#draft" className="btn btn-primary">
-              Draft an agreement
-            </Link>
-            <Link href="/review" className="btn btn-ghost">
-              Review one
-            </Link>
-          </div>
-        </div>
-        <p className="kicker mt-16 animate-pulse text-ink-faint md:mt-24">Scroll ↓</p>
-      </section>
+      {/* ---------- Hero: the opening screen ---------- */}
+      <CosmicHero />
 
       {/* ---------- 01 Draft: pinned 3D ring of agreement cards ---------- */}
       <DraftCarousel
@@ -69,7 +42,7 @@ export default function Home() {
               <p className="kicker">02 / Review</p>
               <h2 className="display extrude mt-3 text-5xl font-[800] text-ink md:text-6xl">
                 Already have an{" "}
-                <span className="script ml-1 inline-block -rotate-3 text-[1.25em]">agreement?</span>
+                <span className="script ml-1 inline-block text-[1.25em]">agreement?</span>
               </h2>
               <p className="mt-4 leading-relaxed text-ink-muted">
                 Upload a PDF, Word file or text. Sage flags risky and one-sided clauses, quotes them exactly,
@@ -103,7 +76,7 @@ export default function Home() {
               <p className="kicker">03 / Know your rights</p>
               <h2 className="display extrude mt-3 text-5xl font-[800] text-ink md:text-6xl">
                 In a situation{" "}
-                <span className="script ml-1 inline-block -rotate-3 text-[1.25em]">right now?</span>
+                <span className="script ml-1 inline-block text-[1.25em]">right now?</span>
               </h2>
               <p className="mt-4 leading-relaxed text-ink-muted">
                 Stopped by traffic police, a deposit that won&apos;t come back, a complaint the police won&apos;t
@@ -138,7 +111,7 @@ export default function Home() {
           <p className="kicker">04 / Why you can trust it</p>
           <h2 className="display extrude mt-3 text-5xl font-[800] text-ink md:text-6xl">
             AI for the talking. Code for the{" "}
-            <span className="script ml-1 inline-block -rotate-3 text-[1.3em]">law.</span>
+            <span className="script ml-1 inline-block text-[1.3em]">law.</span>
           </h2>
         </Reveal>
         <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-4">

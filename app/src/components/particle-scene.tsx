@@ -198,8 +198,8 @@ function startScene(THREE: typeof Three, mount: HTMLDivElement, variant: "hero" 
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
 
-  const deep = new THREE.Color("#2a5ee0");
-  const bright = new THREE.Color("#a9d0ff");
+  const deep = new THREE.Color("#c48a2a");
+  const bright = new THREE.Color("#f7e4b0");
 
   function makeMaterial(vertex: string, opts: { size: number; opacity: number; ocean?: boolean }) {
     return new THREE.ShaderMaterial({

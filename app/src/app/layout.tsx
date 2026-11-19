@@ -2,12 +2,13 @@ import type { Metadata, Viewport } from "next";
 // Fonts are bundled with the site (no request to Google Fonts).
 import "@fontsource-variable/big-shoulders-display";
 import "@fontsource-variable/familjen-grotesk";
+import "@fontsource-variable/antonio";
 import "@fontsource/mr-dafoe";
 import "./globals.css";
 import { Backdrop, SiteFooter, SiteNav } from "@/components/site-chrome";
 
 export const metadata: Metadata = {
-  title: "Sage — agreements you understand",
+  title: "Sage — law that speaks your language",
   description:
     "Draft Indian agreements from verified clauses, explained in plain English. Review any agreement for risky clauses.",
 };

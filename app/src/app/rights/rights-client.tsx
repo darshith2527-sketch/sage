@@ -74,7 +74,7 @@ export default function RightsClient() {
     <main className="mx-auto w-full max-w-3xl px-4 pb-32 pt-24 md:px-8 md:pt-28">
       <p className="kicker">03 / Know your rights</p>
       <h1 className="display extrude mt-2 text-5xl font-[800] text-ink md:text-6xl">
-        Know your <span className="script ml-1 inline-block -rotate-3 text-[1.25em]">rights</span>
+        Know your <span className="script ml-1 inline-block text-[1.25em]">rights</span>
       </h1>
       <p className="mt-3 max-w-xl text-ink-muted">
         In a situation right now? Tell Sage what&apos;s happening, in English, Hindi or Hinglish. You&apos;ll get

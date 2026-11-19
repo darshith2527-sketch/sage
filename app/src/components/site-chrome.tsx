@@ -6,10 +6,9 @@ import { useEffect, useRef, type ReactNode } from "react";
 import { SOCIAL_LINKS } from "@/lib/site";
 import ParticleScene from "./particle-scene";
 
-// The 3D background: the full scales scene on the home page, a calm ocean elsewhere.
+// The 3D background: a calm particle ocean. (The home page's opening screen draws its own scene on top.)
 export function Backdrop() {
-  const pathname = usePathname();
-  return <ParticleScene variant={pathname === "/" ? "hero" : "ambient"} />;
+  return <ParticleScene variant="ambient" />;
 }
 
 const LINKS = [
@@ -19,31 +18,25 @@ const LINKS = [
   { href: "/rights", label: "Rights", match: (p: string) => p.startsWith("/rights") },
 ];
 
-// The navigation frame in the top-left corner.
+// The minimal navigation frame in the top-left corner.
 export function SiteNav() {
   const pathname = usePathname();
   return (
-    <nav aria-label="Main" className="fixed left-4 top-4 z-50 md:left-6 md:top-6">
-      <div className="hud hud-strong flex items-center gap-1 px-4 py-2.5 [--cut:10px]">
-        <Link href="/" className="display mr-2 flex items-center gap-2 text-lg text-ink" aria-label="Sage home">
-          <ScalesMark />
-          Sage
-        </Link>
+    <nav aria-label="Main" className="site-nav fixed left-3 top-3 z-50 sm:left-5 sm:top-5">
+      <ul className="frame flex h-10 items-center px-3.5 sm:h-12 sm:px-5">
         {LINKS.map((link, i) => (
-          <span key={link.href} className="flex items-center">
-            <span aria-hidden className={`mx-2 h-3.5 w-px bg-line ${i === 0 ? "hidden sm:block" : ""}`} />
+          <li key={link.href} className="flex items-center">
+            {i > 0 && <span aria-hidden className="mx-3 h-4 w-px bg-[rgba(80,125,240,0.75)] sm:mx-[1.05rem] sm:h-5" />}
             <Link
               href={link.href}
               aria-current={link.match(pathname) ? "page" : undefined}
-              className={`display text-[0.95rem] transition-colors hover:text-ink ${
-                link.match(pathname) ? "text-accent" : "text-ink-muted"
-              } ${i === 0 ? "hidden sm:inline" : ""}`}
+              className={`hud-label text-[0.82rem] sm:text-[0.95rem] ${link.match(pathname) ? "text-[#6aa6ff]" : "text-[#c3cdf3]"}`}
             >
               {link.label}
             </Link>
-          </span>
+          </li>
         ))}
-      </div>
+      </ul>
     </nav>
   );
 }
@@ -51,7 +44,7 @@ export function SiteNav() {
 // A tiny scales-of-justice logo.
 export function ScalesMark({ className = "h-5 w-5" }: { className?: string }) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className={`text-accent ${className}`}>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className={`text-gold ${className}`}>
       <path d="M12 3v17M7 20h10M4 7h16M12 3.5a1 1 0 1 0 0 .01" strokeLinecap="round" />
       <path d="M4 7l-2.5 6a2.5 2.5 0 0 0 5 0L4 7zM20 7l-2.5 6a2.5 2.5 0 0 0 5 0L20 7z" strokeLinejoin="round" />
     </svg>
@@ -112,7 +105,7 @@ export function SiteFooter() {
       <div className="mx-auto grid max-w-6xl gap-10 px-5 py-14 md:grid-cols-[1.4fr_1fr_1fr] md:px-8">
         <div>
           <p className="display extrude text-6xl font-[850] text-ink md:text-7xl">Sage</p>
-          <p className="script -mt-2 ml-1 -rotate-3 text-3xl md:text-4xl">agreements you understand</p>
+          <p className="script -mt-2 ml-1 text-3xl md:text-4xl">law that speaks your language</p>
           <p className="mt-5 max-w-sm text-sm leading-relaxed text-ink-muted">
             Draft Indian agreements from verified clauses, and see what could hurt you in the ones you&apos;re
             asked to sign.

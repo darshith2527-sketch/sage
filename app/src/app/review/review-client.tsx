@@ -93,7 +93,7 @@ export default function ReviewClient() {
     <main className="mx-auto w-full max-w-4xl px-4 pb-16 pt-24 md:px-8 md:pt-28">
       <p className="kicker">02 / Review</p>
       <h1 className="display extrude mt-2 text-5xl font-[800] text-ink md:text-6xl">
-        Review an <span className="script ml-1 inline-block -rotate-3 text-[1.25em]">agreement</span>
+        Review an <span className="script ml-1 inline-block text-[1.25em]">agreement</span>
       </h1>
       <p className="mt-2 max-w-2xl text-ink-muted">
         Upload or paste any agreement. Sage flags risky and one-sided clauses and explains them in plain words.
