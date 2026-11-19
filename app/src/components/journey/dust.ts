@@ -69,7 +69,7 @@ const VERTEX = /* glsl */ `
     ang += uFlow * age * aLife * (1.0 + 1.5 * rad / uRadius) / max(rad, 2.0);
     vec3 p = vec3(cos(ang) * rad, uY0 + (r.z - 0.5) * uHeight, sin(ang) * rad);
     // Wander and rise.
-    p += (vec3(vnoise3(p * 0.15 + cycle), vnoise3(p * 0.15 + 9.1 + cycle), vnoise3(p * 0.15 + 4.7 + cycle)) - 0.5) * uFlow * 2.0 * age;
+    p += (vec3(vnoise3(p * 0.15 + cycle), vnoise3(p * 0.15 + 9.1 + cycle), vnoise3(p * 0.15 + 4.7 + cycle)) - 0.5) * uFlow * 0.8 * age;
     p.y += uRise * age * aLife;
     // Keep the title clear: particles inside its box are moved to its top or bottom edge.
     if (uHasObstacle > 0.5) {
@@ -90,10 +90,10 @@ const VERTEX = /* glsl */ `
     float spark = 0.0;
     if (aSparkle > 0.5) spark = pow(max(0.0, sin(uTime * 6.2831853 / uSparkleTime + aSeed.w * 40.0)), 12.0) * uSparkleStrength;
     float depth = -mv.z;
-    vAlpha = smoothstep(0.0, 0.3, age) * (1.0 - smoothstep(0.6, 1.0, age)) * smoothstep(4.0, 14.0, depth);
+    vAlpha = smoothstep(0.0, 0.25, age) * (1.0 - smoothstep(0.7, 1.0, age)) * smoothstep(4.0, 14.0, depth);
     vColor = aColor * (1.0 + stir * uFluidGlow + spark * uSparkleGlow * 2.0);
-    vGlow = spark + stir * 0.5;
-    gl_PointSize = max(1.0, aSize * uSizeScale / depth * (1.0 + spark * 2.0 + stir) * mix(1.0, uGlowSize, step(0.001, vGlow) * 0.4));
+    vGlow = spark + stir * 0.15;
+    gl_PointSize = max(1.0, aSize * uSizeScale / depth * (1.0 + spark * 1.2) * mix(1.0, uGlowSize, step(0.001, spark) * 0.4));
   }
 `;
 
@@ -119,19 +119,19 @@ export function createDust(THREE: T3, opts: DustOptions, still: Three.Texture) {
     y: 0,
     height: 1,
     center: [0, 0, 0] as [number, number, number],
-    flow: 0.4,
+    flow: 0.12,
     rise: 0,
     size: [0.02, 0.06] as [number, number],
-    lifetime: [1.2, 2.2] as [number, number],
+    lifetime: [4, 7] as [number, number],
     colors: ["#5fb0ff", "#3d8bff", "#2b6ef2", "#2156d6", "#173fa8", "#8fcaff"],
     glow: 0,
     glowSize: 1,
-    sparkle: 0.015,
+    sparkle: 0.006,
     sparkleStrength: 1,
     sparkleTime: 3,
-    sparkleGlow: 1.5,
-    fluidPush: 0.2,
-    fluidGlow: 3,
+    sparkleGlow: 0.8,
+    fluidPush: 0.035,
+    fluidGlow: 0.25,
     obstacle: null,
     ...opts,
   };

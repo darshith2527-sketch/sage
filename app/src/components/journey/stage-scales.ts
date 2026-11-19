@@ -52,6 +52,7 @@ function drawTheme(theme: Theme) {
 
 export function createScalesStage(THREE: T3, renderer: Three.WebGLRenderer, env: { still: Three.Texture; tier: Tier; themes: Theme[] }): Stage {
   const camera = new THREE.PerspectiveCamera(80, 1, 0.5, 150);
+  const flight = { distance: 0 }; // extra travel along the view during a hand-over
   const world = new THREE.Scene();
   const sky = createSky(THREE, {
     top: "#0b1b44",
@@ -76,8 +77,8 @@ export function createScalesStage(THREE: T3, renderer: Three.WebGLRenderer, env:
     }
     const count = 1e4 * pick(TIERS.particles, tier);
     dust = [
-      createDust(THREE, { count: count * 1.5, radius: 34, half: false, center: [0, 0, 0], height: 0.4, flow: 0.25, size: [0.02, 0.05] }, env.still),
-      createDust(THREE, { count, radius: 30, half: false, center: [0, 8, 0], height: 22, flow: 0.3, rise: 0.15 }, env.still),
+      createDust(THREE, { count: count * 1.5, radius: 34, half: false, center: [0, 0, 0], height: 0.4, flow: 0.06, size: [0.02, 0.05] }, env.still),
+      createDust(THREE, { count, radius: 30, half: false, center: [0, 8, 0], height: 22, flow: 0.08, rise: 0.03 }, env.still),
     ];
     for (const d of dust) world.add(d.points);
   }
@@ -123,11 +124,19 @@ export function createScalesStage(THREE: T3, renderer: Three.WebGLRenderer, env:
     const y = CAM_Y + Math.sin((s / LENGTH) * Math.PI * 2) * 0.8;
     camera.position.set(Math.sin(phi) * orbit, y, Math.cos(phi) * orbit);
     camera.lookAt(LOOK.x, LOOK.y, LOOK.z);
+    // During a hand-over the engine flies the camera further along its view.
+    if (flight.distance) camera.translateZ(-flight.distance);
     camera.updateMatrixWorld();
   }
   place(0);
 
-  return {
+  const stage: Stage = {
+    get fly() {
+      return flight.distance;
+    },
+    set fly(d: number) {
+      flight.distance = d;
+    },
     name: "scales",
     camera,
     length: LENGTH,
@@ -152,6 +161,7 @@ export function createScalesStage(THREE: T3, renderer: Three.WebGLRenderer, env:
     },
     update(f: FrameInfo) {
       revealClock += f.dt;
+      sky.mesh.position.copy(camera.position); // the sky is "at infinity"
       sky.update(f.time);
       scales.update(f.time, Math.min(1, revealClock / 2.5));
       scales.setScale(height * pixelRatio, camera.fov);
@@ -196,4 +206,5 @@ export function createScalesStage(THREE: T3, renderer: Three.WebGLRenderer, env:
       (copy.material as Three.Material).dispose();
     },
   };
+  return stage;
 }

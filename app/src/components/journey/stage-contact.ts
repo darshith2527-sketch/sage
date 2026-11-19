@@ -83,6 +83,7 @@ const COPY = /* glsl */ `
 
 export function createContactStage(THREE: T3, renderer: Three.WebGLRenderer, env: { tier: Tier; socials: Social[]; message: [string, string] }): Stage {
   const camera = new THREE.PerspectiveCamera(80, 1, 0.5, 150);
+  const flight = { distance: 0 }; // extra travel along the view during a hand-over
   const world = new THREE.Scene();
   const sky = createSky(THREE, {
     top: "#0e2257",
@@ -166,11 +167,19 @@ export function createContactStage(THREE: T3, renderer: Three.WebGLRenderer, env
     const k = s / LENGTH;
     camera.position.set(0, 7.2 - k * 0.6, 22 - k * 6);
     camera.lookAt(0, 6.4, 0);
+    // During a hand-over the engine flies the camera further along its view.
+    if (flight.distance) camera.translateZ(-flight.distance);
     camera.updateMatrixWorld();
   }
   place(0);
 
-  return {
+  const stage: Stage = {
+    get fly() {
+      return flight.distance;
+    },
+    set fly(d: number) {
+      flight.distance = d;
+    },
     name: "contact",
     camera,
     length: LENGTH,
@@ -197,6 +206,7 @@ export function createContactStage(THREE: T3, renderer: Three.WebGLRenderer, env
     },
     update(f: FrameInfo) {
       clock += f.dt;
+      sky.mesh.position.copy(camera.position); // the sky is "at infinity"
       sky.update(f.time);
       fibers.update(f.time);
       fibers.setScale();
@@ -233,4 +243,5 @@ export function createContactStage(THREE: T3, renderer: Three.WebGLRenderer, env
       copyMat.dispose();
     },
   };
+  return stage;
 }

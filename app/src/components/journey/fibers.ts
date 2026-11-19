@@ -82,7 +82,7 @@ export function createFibers(THREE: T3, { strands, segments }: { strands: number
     blending: THREE.AdditiveBlending,
     uniforms: {
       uTime: { value: 0 },
-      uSpeed: { value: 0.35 },
+      uSpeed: { value: 0.18 },
       uTop: { value: 46 },
       uSpread: { value: 40 },
       uColumn: { value: 2.6 },

@@ -128,6 +128,7 @@ export interface Stage {
   readonly camera: Three.PerspectiveCamera;
   readonly length: number; // scroll distance through this stage
   readonly endZone: number; // last stretch that hands over to the next stage (0 = final stage)
+  fly: number; // extra travel along the view direction during a hand-over (set by the engine)
   setScroll(s: number): void; // place the camera for a (damped) scroll position
   update(frame: FrameInfo): void;
   render(renderer: Three.WebGLRenderer, target: Three.WebGLRenderTarget): void;

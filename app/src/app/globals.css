@@ -346,6 +346,66 @@ input[type="file"].field::file-selector-button {
   font-size: 0.82rem;
   color: rgba(127, 154, 216, 0.85);
 }
+/* Quick-start menu on the opening screen (opened by "Start the journey"). */
+.quick-start {
+  position: absolute;
+  left: 50%;
+  top: 80%;
+  width: min(46rem, calc(100% - 2rem));
+  transform: translate(-50%, calc(-50% + 12px));
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 0.35s ease,
+    transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1),
+    visibility 0.35s;
+}
+.quick-start.is-open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translate(-50%, -50%);
+}
+.quick-start-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+.quick-start-item {
+  --frame-fill: rgba(8, 19, 50, 0.72);
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 0.9rem 1.1rem 1rem;
+  text-align: left;
+}
+.quick-start-item:hover,
+.quick-start-item:focus-visible {
+  --frame-line: rgba(110, 150, 255, 0.95);
+  --frame-fill: rgba(12, 28, 76, 0.82);
+  outline: none;
+}
+.quick-start-text {
+  font-family: "Excon", "Helvetica Neue", Arial, sans-serif;
+  font-size: 0.78rem;
+  line-height: 1.35;
+  color: #9db0d8;
+}
+@media (max-width: 640px) {
+  .quick-start {
+    top: 76%;
+  }
+  .quick-start-list {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+  .quick-start-item {
+    padding: 0.7rem 1rem;
+  }
+}
+
 /* Invisible links laid over the 3D discs and buttons (positioned by the engine). */
 .journey-spot {
   position: absolute;

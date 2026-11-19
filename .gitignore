@@ -9,3 +9,5 @@ contracts/.env
 
 # Mac system junk
 .DS_Store
+.vercel
+.env*

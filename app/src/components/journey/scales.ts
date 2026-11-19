@@ -94,8 +94,8 @@ const VERTEX = /* glsl */ `
   void main() {
     vec3 p = position;
     // Living surface: points drift a little around their place.
-    float t = uTime * 0.35;
-    p += (vec3(vnoise3(p * 1.3 + t), vnoise3(p * 1.3 + 11.0 - t), vnoise3(p * 1.3 + 5.0 + t)) - 0.5) * 0.06;
+    float t = uTime * 0.18;
+    p += (vec3(vnoise3(p * 1.3 + t), vnoise3(p * 1.3 + 11.0 - t), vnoise3(p * 1.3 + 5.0 + t)) - 0.5) * 0.015;
     // Reveal: points gather in from a scattered cloud.
     vec3 scatter = p + (vec3(hash12(vec2(aSeed, 1.0)), hash12(vec2(aSeed, 2.0)), hash12(vec2(aSeed, 3.0))) - 0.5) * 18.0;
     float k = smoothstep(aSeed * 0.4, aSeed * 0.4 + 0.6, uReveal);
@@ -129,7 +129,7 @@ const FRAGMENT = /* glsl */ `
     float shade = pow(vLight, 1.6) * 0.8 + vRim * 1.3;
     vec3 col = mix(uDeep, uMid, clamp(shade, 0.0, 1.0));
     col = mix(col, uBright, smoothstep(0.75, 1.6, shade));
-    float twinkle = 0.75 + 0.25 * sin(uTime * (1.0 + vSeed * 3.0) + vSeed * 50.0);
+    float twinkle = 0.9 + 0.1 * sin(uTime * (0.5 + vSeed) + vSeed * 50.0);
     float a = exp(-d * d * 4.0) * (0.35 + shade * 0.9) * twinkle * vAlpha;
     gl_FragColor = vec4(col * a, 1.0);
   }

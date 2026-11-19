@@ -1,57 +1,26 @@
 import type * as Three from "three";
 import { HeroFluid } from "./fluid";
-import { detectTier, GLSL_NOISE, pick, QUAD_VERTEX, TIERS, type FrameInfo, type Stage, type T3, type Tier } from "./shared";
+import { detectTier, pick, QUAD_VERTEX, TIERS, type FrameInfo, type Stage, type T3, type Tier } from "./shared";
 
 // Runs the home page journey: one WebGL canvas, a list of stages (scenes), a virtual scroll
 // (wheel, touch, keys) that moves the camera through the current stage, and a cinematic
 // hand-over to the next stage near its end. Clickable 3D objects get invisible real links laid
 // over them, so hover, click, keyboard focus and screen readers all work natively.
 
-const TRANSITION = { duration: 1.6, warp: 0.35, swirl: 1, rgbShift: 1, burnColor: [0.239, 0.545, 1.0] };
+// Hand-over between stages: no visible effect, just a flight. The camera keeps going and
+// speeds up into the dark; the next scene comes towards you from far ahead and you glide into
+// it. The two images blend softly in the middle, while both are mostly dark space.
+const FLIGHT = { duration: 2.6, out: 46, in: 52 };
+const ease = (t: number) => t * t * (3 - 2 * t);
 
-// Hand-over between two stages: the old image is pulled inwards and twisted, colours split at
-// the peak, and it burns away along a glowing blue edge to reveal the new one.
-const TRANSITION_FRAGMENT = /* glsl */ `
+const BLEND_FRAGMENT = /* glsl */ `
   precision highp float;
   varying vec2 vUv;
   uniform sampler2D uFrom;
   uniform sampler2D uTo;
-  uniform float uProgress;
-  uniform float uAspect;
-  uniform float uWarp;
-  uniform float uSwirl;
-  uniform float uShift;
-  uniform vec3 uBurn;
-  ${GLSL_NOISE}
-  vec2 twist(vec2 uv, float amount, float zoom) {
-    vec2 p = (uv - 0.5) * vec2(uAspect, 1.0);
-    float r = length(p);
-    float a = amount * (1.0 - smoothstep(0.0, 0.9, r));
-    p = mat2(cos(a), -sin(a), sin(a), cos(a)) * p;
-    p *= 1.0 - zoom;
-    return p / vec2(uAspect, 1.0) + 0.5;
-  }
-  vec3 sampleShift(sampler2D t, vec2 uv, float s) {
-    vec2 o = (uv - 0.5) * s;
-    return vec3(texture2D(t, uv + o).r, texture2D(t, uv).g, texture2D(t, uv - o).b);
-  }
+  uniform float uMix;
   void main() {
-    float p = uProgress;
-    float e = p * p * (3.0 - 2.0 * p);
-    float peak = sin(3.14159265 * p);
-    vec2 uvFrom = twist(vUv, uSwirl * e * 1.2, uWarp * e);
-    vec2 uvTo = twist(vUv, -uSwirl * (1.0 - e) * 0.8, -uWarp * (1.0 - e) * 0.6);
-    float shift = uShift * peak * 0.03;
-    vec3 a = sampleShift(uFrom, uvFrom, shift);
-    vec3 b = sampleShift(uTo, uvTo, shift);
-    // Burn: a noisy front sweeps the screen; just behind it, a thin blue glow.
-    vec2 q = (vUv - 0.5) * vec2(uAspect, 1.0);
-    float n = vnoise(q * 3.0 + 4.0) * 0.6 + vnoise(q * 9.0) * 0.4;
-    float front = mix(-0.2, 1.2, e);
-    float t = smoothstep(front - 0.08, front + 0.08, n);
-    float edge = exp(-pow((n - front) / 0.05, 2.0)) * peak;
-    vec3 col = mix(b, a, t) + uBurn * edge * 1.6;
-    gl_FragColor = vec4(col, 1.0);
+    gl_FragColor = vec4(mix(texture2D(uFrom, vUv).rgb, texture2D(uTo, vUv).rgb, uMix), 1.0);
   }
 `;
 
@@ -107,19 +76,10 @@ export function startJourney(THREE: T3, o: JourneyOptions): JourneyHandle | null
   const copyMaterial = new THREE.ShaderMaterial({ vertexShader: QUAD_VERTEX, fragmentShader: COPY_FRAGMENT, uniforms: { uMap: { value: rtA.texture } }, depthTest: false, depthWrite: false });
   const transitionMaterial = new THREE.ShaderMaterial({
     vertexShader: QUAD_VERTEX,
-    fragmentShader: TRANSITION_FRAGMENT,
+    fragmentShader: BLEND_FRAGMENT,
     depthTest: false,
     depthWrite: false,
-    uniforms: {
-      uFrom: { value: rtA.texture },
-      uTo: { value: rtB.texture },
-      uProgress: { value: 0 },
-      uAspect: { value: 1 },
-      uWarp: { value: TRANSITION.warp },
-      uSwirl: { value: TRANSITION.swirl },
-      uShift: { value: TRANSITION.rgbShift },
-      uBurn: { value: new THREE.Vector3(...TRANSITION.burnColor) },
-    },
+    uniforms: { uFrom: { value: rtA.texture }, uTo: { value: rtB.texture }, uMix: { value: 0 } },
   });
   const presentMesh = new THREE.Mesh(quad, copyMaterial);
   const presentScene = new THREE.Scene();
@@ -141,7 +101,6 @@ export function startJourney(THREE: T3, o: JourneyOptions): JourneyHandle | null
     renderer.setSize(width, height, false);
     rtA.setSize(Math.round(width * pixelRatio), Math.round(height * pixelRatio));
     rtB.setSize(Math.round(width * pixelRatio), Math.round(height * pixelRatio));
-    transitionMaterial.uniforms.uAspect.value = width / height;
     for (const s of stages) s.resize(width, height, pixelRatio);
   }
 
@@ -324,6 +283,14 @@ export function startJourney(THREE: T3, o: JourneyOptions): JourneyHandle | null
 
     const f = frameInfo(dt);
     const damp = 1 - Math.exp(-dt * (reduceMotion ? 30 : 9));
+    if (transition && !reduceMotion) {
+      // Forward: the old scene speeds away behind you, the new one glides in from ahead.
+      // Backward: the same flight in reverse.
+      const t = Math.min(1, transition.t);
+      const dir = transition.to > transition.from ? 1 : -1;
+      stages[transition.from].fly = dir * FLIGHT.out * t * t * t;
+      stages[transition.to].fly = -dir * FLIGHT.in * Math.pow(1 - t, 3);
+    }
     const active = transition ? [transition.from, transition.to] : [current];
     for (const i of active) {
       const sc = scroll[i];
@@ -335,12 +302,14 @@ export function startJourney(THREE: T3, o: JourneyOptions): JourneyHandle | null
     o.onProgress?.(st.name, st.length > 0 ? scroll[current].value / st.length : 0);
 
     if (transition) {
-      transition.t += dt / (reduceMotion ? 0.35 : TRANSITION.duration);
+      transition.t += dt / (reduceMotion ? 0.35 : FLIGHT.duration);
       stages[transition.from].render(renderer, rtA);
       stages[transition.to].render(renderer, rtB);
       presentMesh.material = transitionMaterial;
-      transitionMaterial.uniforms.uProgress.value = Math.min(1, transition.t);
+      transitionMaterial.uniforms.uMix.value = ease(Math.min(1, Math.max(0, (transition.t - 0.3) / 0.45)));
       if (transition.t >= 1) {
+        stages[transition.from].fly = 0;
+        stages[transition.to].fly = 0;
         current = transition.to;
         transition = null;
         hover = null;

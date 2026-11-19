@@ -18,6 +18,7 @@ const ORBIT = 10; // the camera turns around a point this far ahead
 
 export function createHomeStage(THREE: T3, renderer: Three.WebGLRenderer, env: { still: Three.Texture; tier: Tier; canFluid: boolean; subtitle: string }): Stage {
   const camera = new THREE.PerspectiveCamera(80, 1, 1, 120);
+  const flight = { distance: 0 }; // extra travel along the view during a hand-over
   const scene = new THREE.Scene();
   const sky = createSky(THREE);
   scene.add(sky.mesh);
@@ -50,7 +51,7 @@ export function createHomeStage(THREE: T3, renderer: Three.WebGLRenderer, env: {
   function setupFluid() {
     const res = pick(TIERS.fluidRes, tier);
     const want = env.canFluid && res > 0;
-    if (want && !fluid) fluid = new HeroFluid(THREE, renderer, { simRes: res, dyeRes: res * 2, radius: 0.002 });
+    if (want && !fluid) fluid = new HeroFluid(THREE, renderer, { simRes: res, dyeRes: res * 2, radius: 0.0015, velocityDissipation: 1.2, dyeDissipation: 0.9 });
     if (!want && fluid) {
       fluid.dispose();
       fluid = null;
@@ -71,10 +72,18 @@ export function createHomeStage(THREE: T3, renderer: Three.WebGLRenderer, env: {
     const pivotZ = z - ORBIT;
     camera.position.set(Math.sin(yaw) * ORBIT, 0, pivotZ + Math.cos(yaw) * ORBIT);
     camera.lookAt(0, 0, pivotZ);
+    // During a hand-over the engine flies the camera further along its view.
+    if (flight.distance) camera.translateZ(-flight.distance);
     camera.updateMatrixWorld();
   }
 
-  return {
+  const stage: Stage = {
+    get fly() {
+      return flight.distance;
+    },
+    set fly(d: number) {
+      flight.distance = d;
+    },
     name: "home",
     camera,
     get length() {
@@ -120,6 +129,7 @@ export function createHomeStage(THREE: T3, renderer: Three.WebGLRenderer, env: {
       const target = f.pointer.inside ? -(f.pointer.x - 0.5) * 2 * MAX_YAW : 0;
       yaw += (target - yaw) * (1 - Math.exp(-f.dt * 5));
       place();
+      sky.mesh.position.copy(camera.position); // the sky is "at infinity"
       sky.update(f.time);
       if (fluid) {
         fluid.step(f.dt);
@@ -146,4 +156,5 @@ export function createHomeStage(THREE: T3, renderer: Three.WebGLRenderer, env: {
       fluid?.dispose();
     },
   };
+  return stage;
 }

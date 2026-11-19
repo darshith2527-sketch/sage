@@ -281,10 +281,10 @@ export class HeroFluid {
         u.uPoint.value.set(s.x, s.y);
         u.uAspect.value = this.aspect;
         u.uRadius.value = this.opts.radius;
-        u.uColor.value.set(s.dx * 6000, s.dy * 6000, 0);
+        u.uColor.value.set(s.dx * 3000, s.dy * 3000, 0);
       });
       v.swap();
-      const amount = Math.min(1, Math.hypot(s.dx * this.aspect, s.dy) * 30);
+      const amount = Math.min(0.6, Math.hypot(s.dx * this.aspect, s.dy) * 18);
       this.run("splat", this.dye.write, (u) => {
         u.uTarget.value = this.dye.read.texture;
         u.uPoint.value.set(s.x, s.y);
