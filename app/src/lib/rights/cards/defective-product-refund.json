@@ -1,0 +1,86 @@
+{
+  "id": "defective-product-refund",
+  "title": "Shop won't replace or refund a defective product",
+  "category": "consumer",
+  "triggers": [
+    "shop refusing refund for defective phone",
+    "warranty not honoured",
+    "service centre won't repair",
+    "kharab saman wapas nahi le raha dukaandar",
+    "online order arrived broken"
+  ],
+  "rights": [
+    {
+      "act": "Consumer Protection Act, 2019",
+      "section": "s.2(9)",
+      "plain_explanation": "As a consumer you have the right to be heard and to seek redress against unfair trade practices.",
+      "source_url": "https://www.indiacode.nic.in/bitstream/123456789/18964/1/cpa.pdf"
+    },
+    {
+      "act": "Consumer Protection Act, 2019",
+      "section": "s.2(47)(viii)",
+      "plain_explanation": "Refusing to take back defective goods and refund you within the period on the bill, or within 30 days if none is stated, is an unfair trade practice.",
+      "source_url": "https://www.indiacode.nic.in/bitstream/123456789/18964/1/cpa.pdf"
+    },
+    {
+      "act": "Consumer Protection Act, 2019",
+      "section": "s.35",
+      "plain_explanation": "You can file a complaint with the District Consumer Commission, including electronically.",
+      "source_url": "https://www.indiacode.nic.in/bitstream/123456789/18964/1/cpa.pdf"
+    },
+    {
+      "act": "Consumer Protection Act, 2019",
+      "section": "s.34(2)(d)",
+      "plain_explanation": "You can file in the district where you live or work, not only where the seller is.",
+      "source_url": "https://www.indiacode.nic.in/bitstream/123456789/18964/1/cpa.pdf"
+    },
+    {
+      "act": "Consumer Protection Act, 2019",
+      "section": "s.69",
+      "plain_explanation": "File within two years from when the problem arose.",
+      "source_url": "https://www.indiacode.nic.in/bitstream/123456789/18964/1/cpa.pdf"
+    },
+    {
+      "act": "Consumer Protection (Jurisdiction) Rules, 2021",
+      "section": "r.3",
+      "plain_explanation": "The District Commission hears claims up to ₹50 lakh.",
+      "source_url": "https://www.thc.nic.in/Central%20Governmental%20Rules/Consumer%20Protection%20(Jurisdiction%20of%20the%20District%20Commission,%20the%20State%20Commission%20and%20the%20National%20Commission)%20Rules,%202021.pdf"
+    }
+  ],
+  "do_now": [
+    "Keep the bill, warranty card and photos or videos of the defect.",
+    "Write to the seller or brand with a clear request (replace, repair or refund) and a deadline.",
+    "Call the National Consumer Helpline on 1915 to register a grievance."
+  ],
+  "user_at_fault_cases": [
+    "Damage you caused, or claims outside the warranty period or terms, may not be covered."
+  ],
+  "escalation": [
+    {
+      "label": "National Consumer Helpline",
+      "detail": "Call 1915 or register online before going to the commission.",
+      "url": "https://consumerhelpline.gov.in"
+    },
+    {
+      "label": "District Consumer Commission",
+      "detail": "File a complaint, online or in person, within two years."
+    },
+    {
+      "label": "Free legal aid",
+      "detail": "Call NALSA on 15100 or visit your District Legal Services Authority (DLSA) at the district court. Women, children, people in custody and people below the income limit get a free lawyer.",
+      "url": "https://nalsa.gov.in/services/legal-aid/eligibility"
+    }
+  ],
+  "helplines": [
+    {
+      "name": "National Consumer Helpline",
+      "number": "1915"
+    },
+    {
+      "name": "NALSA free legal aid",
+      "number": "15100"
+    }
+  ],
+  "last_verified": "2026-11-19",
+  "emergency": false
+}

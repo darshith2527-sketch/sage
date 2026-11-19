@@ -1,0 +1,56 @@
+{
+  "id": "echallan-dispute",
+  "title": "Got an e-challan you think is wrong",
+  "category": "traffic",
+  "triggers": [
+    "wrong e-challan on my vehicle",
+    "challan for a red light I didn't jump",
+    "camera challan but I wasn't there",
+    "galat challan aaya hai",
+    "how to contest a traffic challan"
+  ],
+  "rights": [
+    {
+      "act": "Motor Vehicles Act, 1988",
+      "section": "s.136A",
+      "plain_explanation": "States enforce traffic rules with speed cameras, CCTV and body-worn cameras, so most challans come with photo or video evidence you can check.",
+      "source_url": "https://indiacode.nic.in/bitstream/123456789/1798/1/A1988-59.pdf"
+    },
+    {
+      "act": "Motor Vehicles Act, 1988",
+      "section": "s.208",
+      "plain_explanation": "For many traffic offences you can plead guilty and pay the fine without going to court. Once paid, no further case is taken against you for it.",
+      "source_url": "https://indiacode.nic.in/bitstream/123456789/1798/1/A1988-59.pdf"
+    }
+  ],
+  "do_now": [
+    "Look up the challan by vehicle number on the official portal and check the photo or video.",
+    "If the vehicle number, place or time is wrong, choose \"contest\" instead of paying.",
+    "Keep proof: where you and your vehicle actually were, fuel bills, location history.",
+    "Never pay through an agent or a link sent on WhatsApp."
+  ],
+  "user_at_fault_cases": [
+    "If the photo clearly shows your vehicle breaking the rule, the challan is valid. Paying it online closes the matter."
+  ],
+  "escalation": [
+    {
+      "label": "Virtual Courts portal",
+      "detail": "Search your challan, then pick \"I wish to contest the case\". You get the court and date in the acknowledgement.",
+      "url": "https://vcourts.gov.in"
+    },
+    {
+      "label": "Free legal aid",
+      "detail": "Call NALSA on 15100 or visit your District Legal Services Authority (DLSA) at the district court. Women, children, people in custody and people below the income limit get a free lawyer.",
+      "url": "https://nalsa.gov.in/services/legal-aid/eligibility"
+    }
+  ],
+  "helplines": [
+    {
+      "name": "NALSA free legal aid",
+      "number": "15100"
+    }
+  ],
+  "notes": "Some states route disputes through their own traffic police grievance pages as well.",
+  "last_verified": "2026-11-19",
+  "emergency": false
+}

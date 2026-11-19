@@ -9,11 +9,16 @@ import {
 } from "ai";
 import { openai } from "@ai-sdk/openai";
 import { getContractType } from "@/contracts/registry";
+import { rateLimit } from "@/lib/rate-limit";
 
 // Allow the AI up to 30 seconds to respond.
 export const maxDuration = 30;
 
 export async function POST(req: Request) {
+  // Per-IP limit, so nobody can drain the AI credit.
+  const limited = await rateLimit(req, "intake");
+  if (limited) return limited;
+
   // Which agreement type? It comes in the URL: /api/intake?type=freelance
   const type = getContractType(new URL(req.url).searchParams.get("type") ?? "");
   if (!type) {

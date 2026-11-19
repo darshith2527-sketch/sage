@@ -1,0 +1,80 @@
+{
+  "id": "upi-online-fraud",
+  "title": "Lost money to a UPI or online fraud",
+  "category": "cyber",
+  "triggers": [
+    "money debited after I clicked a link",
+    "UPI fraud",
+    "someone pretending to be from the bank took my OTP",
+    "paise kat gaye fraud call",
+    "scammed online"
+  ],
+  "rights": [
+    {
+      "act": "Information Technology Act, 2000",
+      "section": "s.66D",
+      "plain_explanation": "Cheating someone by pretending to be someone else using a phone or computer is a crime (up to 3 years and a fine).",
+      "source_url": "https://www.indiacode.nic.in/bitstream/123456789/15386/1/it_amendment_act2008.pdf"
+    },
+    {
+      "act": "Information Technology Act, 2000",
+      "section": "s.66C",
+      "plain_explanation": "Fraudulently using someone's password, electronic signature or other unique identity feature is identity theft (up to 3 years and a fine).",
+      "source_url": "https://www.indiacode.nic.in/bitstream/123456789/15386/1/it_amendment_act2008.pdf"
+    },
+    {
+      "act": "Bharatiya Nyaya Sanhita, 2023",
+      "section": "s.318(4)",
+      "plain_explanation": "Cheating someone into handing over money or property is a crime, punishable with up to seven years.",
+      "source_url": "https://home.wb.gov.in/public/assets/frontend/pdf/bns_book_after_correction.pdf",
+      "old_section": "IPC s.420"
+    },
+    {
+      "act": "RBI circular on customer liability (6 July 2017)",
+      "section": "paras 6–10",
+      "plain_explanation": "If you tell your bank within three working days about an unauthorised electronic transaction caused by a third-party breach, your liability is zero. The bank must credit the amount within 10 working days of your report and resolve the case within 90 days.",
+      "source_url": "https://www.rbi.org.in/scripts/NotificationUser.aspx?Id=11040"
+    }
+  ],
+  "do_now": [
+    "Call 1930 right away; quick reports can freeze the money.",
+    "Call your bank to block your card or UPI and report the transaction.",
+    "Report it on cybercrime.gov.in and note the complaint number.",
+    "Keep screenshots of messages, numbers and transaction IDs. Never share an OTP or PIN."
+  ],
+  "user_at_fault_cases": [
+    "If you shared your OTP or PIN yourself, the bank may hold you partly liable. Still report it at once."
+  ],
+  "escalation": [
+    {
+      "label": "National Cybercrime Reporting Portal",
+      "detail": "File the complaint and track it.",
+      "url": "https://cybercrime.gov.in"
+    },
+    {
+      "label": "Bank, then RBI Ombudsman",
+      "detail": "If the bank doesn't resolve it, escalate to the RBI Ombudsman."
+    },
+    {
+      "label": "Free legal aid",
+      "detail": "Call NALSA on 15100 or visit your District Legal Services Authority (DLSA) at the district court. Women, children, people in custody and people below the income limit get a free lawyer.",
+      "url": "https://nalsa.gov.in/services/legal-aid/eligibility"
+    }
+  ],
+  "helplines": [
+    {
+      "name": "Cyber Crime Helpline",
+      "number": "1930"
+    },
+    {
+      "name": "Emergency (police, fire, ambulance)",
+      "number": "112"
+    },
+    {
+      "name": "NALSA free legal aid",
+      "number": "15100"
+    }
+  ],
+  "last_verified": "2026-11-19",
+  "emergency": false
+}

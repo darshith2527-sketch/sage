@@ -69,10 +69,11 @@ export default function DraftClient({ typeId }: { typeId: string }) {
     }
   }
 
-  // Keep the chat scrolled to the newest message.
-  const bottomRef = useRef<HTMLDivElement>(null);
+  // Keep the chat scrolled to the newest message. Only the chat box scrolls, not the page.
+  const chatRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    const box = chatRef.current;
+    if (box && messages.length > 0) box.scrollTo({ top: box.scrollHeight, behavior: "smooth" });
   }, [messages]);
 
   function send(text: string) {
@@ -82,27 +83,28 @@ export default function DraftClient({ typeId }: { typeId: string }) {
   }
 
   return (
-    <main className="min-h-screen bg-zinc-50 text-zinc-900">
-      <div className="mx-auto grid max-w-6xl gap-6 p-4 md:grid-cols-[1fr_380px] md:p-8">
-        {/* ---------- Chat ---------- */}
-        <section className="flex h-[85vh] flex-col rounded-2xl border border-zinc-200 bg-white shadow-sm">
-          <header className="border-b border-zinc-200 px-5 py-4">
-            <Link href="/" className="text-xs text-blue-600">
-              ← All agreements
-            </Link>
-            <h1 className="mt-1 text-lg font-semibold">{type.name}</h1>
-            <p className="text-sm text-zinc-500">
-              Tell Sage about the deal the way you&apos;d tell a friend. It will ask about anything missing.
-            </p>
-          </header>
+    <main className="mx-auto w-full max-w-6xl px-4 pb-16 pt-24 md:px-8 md:pt-28">
+      <div className="mb-6">
+        <Link href="/#draft" className="kicker hover:text-ink">
+          ← All agreements
+        </Link>
+        <h1 className="display extrude mt-2 text-5xl font-[800] text-ink md:text-6xl">{type.name}</h1>
+        <p className="mt-2 max-w-2xl text-ink-muted">
+          Tell Sage about the deal the way you&apos;d tell a friend. It will ask about anything missing.
+        </p>
+      </div>
 
-          <div className="flex-1 space-y-4 overflow-y-auto px-5 py-4">
+      <div className="grid gap-6 md:grid-cols-[1fr_360px]">
+        {/* ---------- Chat ---------- */}
+        <section className="hud flex h-[70vh] min-h-[460px] flex-col">
+          <div ref={chatRef} className="scroll-thin flex-1 space-y-4 overflow-y-auto px-5 py-5">
             {messages.length === 0 && (
               <button
                 onClick={() => send(type.example)}
-                className="w-full rounded-xl border border-dashed border-zinc-300 p-4 text-left text-sm text-zinc-600 hover:bg-zinc-50"
+                className="w-full border border-dashed border-line bg-white/[0.02] p-4 text-left text-sm leading-relaxed text-ink-muted transition-colors hover:border-accent hover:bg-white/[0.05]"
               >
-                <span className="font-medium text-zinc-900">Try an example:</span> {type.example}
+                <span className="kicker mb-1 block">Try an example</span>
+                {type.example}
               </button>
             )}
 
@@ -113,23 +115,25 @@ export default function DraftClient({ typeId }: { typeId: string }) {
               return (
                 <div key={message.id} className={mine ? "flex justify-end" : "flex justify-start"}>
                   <div
-                    className={`max-w-[80%] whitespace-pre-wrap rounded-2xl px-4 py-2.5 text-sm leading-relaxed ${
-                      mine ? "bg-blue-600 text-white" : "bg-zinc-100 text-zinc-900"
+                    className={`max-w-[85%] whitespace-pre-wrap px-4 py-2.5 text-sm leading-relaxed ${
+                      mine
+                        ? "bg-glow/25 text-ink shadow-[inset_0_0_0_1px_rgba(127,178,255,0.45)]"
+                        : "bg-white/[0.05] text-ink shadow-[inset_0_0_0_1px_rgba(110,160,255,0.18)]"
                     }`}
                   >
+                    {!mine && <span className="kicker mb-1 block text-[0.65rem]">Sage</span>}
                     {text}
                   </div>
                 </div>
               );
             })}
 
-            {busy && <p className="text-sm text-zinc-400">Sage is thinking…</p>}
+            {busy && <p className="kicker animate-pulse text-ink-faint">Sage is thinking…</p>}
             {error && (
-              <p className="rounded-lg bg-red-50 p-3 text-sm text-red-700">
-                Something went wrong. Check the terminal for the error, then try again.
+              <p className="border border-high/40 bg-high/10 p-3 text-sm text-high">
+                Something went wrong. Please try again.
               </p>
             )}
-            <div ref={bottomRef} />
           </div>
 
           <form
@@ -137,31 +141,35 @@ export default function DraftClient({ typeId }: { typeId: string }) {
               e.preventDefault();
               send(input);
             }}
-            className="flex gap-2 border-t border-zinc-200 p-3"
+            className="flex gap-2 border-t border-line p-3"
           >
             <input
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Describe the deal…"
-              className="flex-1 rounded-xl border border-zinc-300 px-4 py-2.5 text-sm outline-none focus:border-blue-500"
+              aria-label="Message to Sage"
+              className="field flex-1"
             />
-            <button
-              type="submit"
-              disabled={busy || !input.trim()}
-              className="rounded-xl bg-blue-600 px-5 text-sm font-medium text-white disabled:opacity-40"
-            >
+            <button type="submit" disabled={busy || !input.trim()} className="btn btn-primary">
               Send
             </button>
           </form>
         </section>
 
         {/* ---------- Deal so far ---------- */}
-        <aside className="h-fit rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm">
+        <aside className="hud h-fit p-5">
           <div className="mb-4 flex items-baseline justify-between">
-            <h2 className="font-semibold">Deal so far</h2>
-            <span className="text-xs text-zinc-500">
+            <h2 className="display text-xl text-ink">Deal so far</h2>
+            <span className="kicker text-ink-faint">
               {requiredCount - missing.length}/{requiredCount} filled
             </span>
+          </div>
+          {/* Progress bar */}
+          <div className="mb-5 h-0.5 bg-line/40">
+            <div
+              className="h-full bg-accent shadow-[0_0_8px_var(--glow)] transition-all duration-500"
+              style={{ width: `${((requiredCount - missing.length) / requiredCount) * 100}%` }}
+            />
           </div>
 
           <dl className="space-y-3">
@@ -169,10 +177,10 @@ export default function DraftClient({ typeId }: { typeId: string }) {
               const shown = formatForPanel(field, deal[field.key]);
               return (
                 <div key={field.key}>
-                  <dt className="text-xs font-medium uppercase tracking-wide text-zinc-500">{field.label}</dt>
-                  <dd className="text-sm">
+                  <dt className="kicker text-[0.68rem] text-ink-faint">{field.label}</dt>
+                  <dd className="text-sm text-ink">
                     {shown === null ? (
-                      <span className="text-zinc-400">—</span>
+                      <span className="text-ink-faint">—</span>
                     ) : Array.isArray(shown) ? (
                       <ol className="mt-1 list-decimal space-y-0.5 pl-5">
                         {shown.map((line, i) => (
@@ -189,7 +197,7 @@ export default function DraftClient({ typeId }: { typeId: string }) {
           </dl>
 
           {problems.length > 0 && (
-            <div className="mt-4 space-y-1 rounded-lg bg-amber-50 p-3 text-sm text-amber-800">
+            <div className="mt-5 space-y-1 border border-medium/40 bg-medium/10 p-3 text-sm text-medium">
               {problems.map((p) => (
                 <p key={p}>⚠ {p}</p>
               ))}
@@ -197,32 +205,30 @@ export default function DraftClient({ typeId }: { typeId: string }) {
           )}
 
           {missing.length === 0 && problems.length === 0 && (
-            <div className="mt-4 space-y-3 rounded-lg bg-green-50 p-3 text-sm text-green-900">
-              <p>All details collected.{optionalClauses.length > 0 && " Add any optional clauses, then draft."}</p>
+            <div className="mt-5 space-y-3 border border-ok/40 bg-ok/10 p-3 text-sm text-ink">
+              <p className="text-ok">
+                All details collected.{optionalClauses.length > 0 && " Add any optional clauses, then draft."}
+              </p>
               {optionalClauses.map((c) => (
                 <label key={c.id} className="flex items-start gap-2">
                   <input
                     type="checkbox"
-                    className="mt-1"
+                    className="mt-1 accent-[var(--glow)]"
                     checked={optional.includes(c.id)}
                     onChange={(e) =>
                       setOptional(e.target.checked ? [...optional, c.id] : optional.filter((id) => id !== c.id))
                     }
                   />
                   <span>
-                    <span className="font-medium">{c.title}</span>
-                    <span className="block text-xs text-green-800">{c.plainExplanation}</span>
+                    <span className="font-semibold">{c.title}</span>
+                    <span className="block text-xs text-ink-muted">{c.plainExplanation}</span>
                   </span>
                 </label>
               ))}
-              <button
-                onClick={draftContract}
-                disabled={drafting}
-                className="w-full rounded-xl bg-green-700 py-2.5 font-medium text-white disabled:opacity-50"
-              >
+              <button onClick={draftContract} disabled={drafting} className="btn btn-primary w-full">
                 {drafting ? "Drafting…" : contract ? "Draft again" : "Draft contract"}
               </button>
-              {draftError && <p className="text-red-700">{draftError}</p>}
+              {draftError && <p className="text-high">{draftError}</p>}
             </div>
           )}
         </aside>

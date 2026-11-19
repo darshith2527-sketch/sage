@@ -1,0 +1,47 @@
+{
+  "id": "free-legal-aid",
+  "title": "I need a lawyer but can't afford one",
+  "category": "legal-aid",
+  "triggers": [
+    "I can't afford a lawyer",
+    "free lawyer",
+    "legal aid kaise milega",
+    "who can get free legal help"
+  ],
+  "rights": [
+    {
+      "act": "Constitution of India",
+      "section": "Art. 39A",
+      "plain_explanation": "The State must provide free legal aid, so no one is denied justice because they're poor or disadvantaged.",
+      "source_url": "https://eparlib.sansad.in/bitstream/123456789/2982247/1/29-05-27_Constitution_English_Final.pdf"
+    },
+    {
+      "act": "Legal Services Authorities Act, 1987",
+      "section": "s.12",
+      "plain_explanation": "Free legal services are available to women and children, SC/ST members, people in custody, victims of trafficking or disaster, persons with disabilities, industrial workers, and people below the income limit.",
+      "source_url": "https://nalsa.gov.in/services/legal-aid/eligibility"
+    }
+  ],
+  "do_now": [
+    "Call 15100 (NALSA's toll-free helpline).",
+    "Or visit the District Legal Services Authority at your district court.",
+    "Carry any papers about your case."
+  ],
+  "user_at_fault_cases": [],
+  "escalation": [
+    {
+      "label": "Free legal aid",
+      "detail": "Call NALSA on 15100 or visit your District Legal Services Authority (DLSA) at the district court. Women, children, people in custody and people below the income limit get a free lawyer.",
+      "url": "https://nalsa.gov.in/services/legal-aid/eligibility"
+    }
+  ],
+  "helplines": [
+    {
+      "name": "NALSA free legal aid",
+      "number": "15100"
+    }
+  ],
+  "notes": "The income limit is set by each state.",
+  "last_verified": "2026-11-19",
+  "emergency": false
+}

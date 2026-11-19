@@ -1,0 +1,78 @@
+{
+  "id": "fir-refused-zero-fir",
+  "title": "Police won't register my complaint (FIR)",
+  "category": "police",
+  "triggers": [
+    "police refusing to file FIR",
+    "police said go to another station",
+    "thane wale FIR nahi likh rahe",
+    "can I file FIR online",
+    "police not taking my complaint"
+  ],
+  "rights": [
+    {
+      "act": "Bharatiya Nagarik Suraksha Sanhita, 2023",
+      "section": "s.173(1)",
+      "plain_explanation": "You can report a cognizable offence at any police station, whatever the area where it happened (a \"Zero FIR\"). You can also report it by electronic means, then sign within three days.",
+      "source_url": "https://indiacode.nic.in/bitstream/123456789/20099/3/A2023-46.pdf",
+      "old_section": "CrPC s.154"
+    },
+    {
+      "act": "Bharatiya Nagarik Suraksha Sanhita, 2023",
+      "section": "s.173(2)",
+      "plain_explanation": "You must be given a copy of your FIR immediately and free of cost.",
+      "source_url": "https://indiacode.nic.in/bitstream/123456789/20099/3/A2023-46.pdf",
+      "old_section": "CrPC s.154(2)"
+    },
+    {
+      "act": "Bharatiya Nagarik Suraksha Sanhita, 2023",
+      "section": "s.173(4)",
+      "plain_explanation": "If the station refuses, send your complaint in writing by post to the Superintendent of Police. If that fails too, you can apply to the Magistrate.",
+      "source_url": "https://indiacode.nic.in/bitstream/123456789/20099/3/A2023-46.pdf",
+      "old_section": "CrPC s.154(3)"
+    },
+    {
+      "act": "Bharatiya Nagarik Suraksha Sanhita, 2023",
+      "section": "s.175(3)",
+      "plain_explanation": "A Magistrate can order the police to investigate a cognizable case, on an application supported by an affidavit.",
+      "source_url": "https://indiacode.nic.in/bitstream/123456789/20099/3/A2023-46.pdf",
+      "old_section": "CrPC s.156(3)"
+    }
+  ],
+  "do_now": [
+    "Write your complaint down clearly: what, when, where, who.",
+    "Ask the officer to register it as a Zero FIR if they say it's not their area.",
+    "Ask for your free copy of the FIR.",
+    "If they still refuse, note the officer's name and time, and post your complaint to the SP."
+  ],
+  "user_at_fault_cases": [
+    "For some offences punishable with 3 to 7 years, police may first do a short preliminary enquiry (up to 14 days) before registering. That alone isn't a refusal."
+  ],
+  "escalation": [
+    {
+      "label": "Superintendent of Police",
+      "detail": "Send the complaint in writing by post to the SP of the district."
+    },
+    {
+      "label": "Magistrate",
+      "detail": "Apply to the Magistrate with an affidavit if the SP doesn't act."
+    },
+    {
+      "label": "Free legal aid",
+      "detail": "Call NALSA on 15100 or visit your District Legal Services Authority (DLSA) at the district court. Women, children, people in custody and people below the income limit get a free lawyer.",
+      "url": "https://nalsa.gov.in/services/legal-aid/eligibility"
+    }
+  ],
+  "helplines": [
+    {
+      "name": "Emergency (police, fire, ambulance)",
+      "number": "112"
+    },
+    {
+      "name": "NALSA free legal aid",
+      "number": "15100"
+    }
+  ],
+  "last_verified": "2026-11-19",
+  "emergency": false
+}

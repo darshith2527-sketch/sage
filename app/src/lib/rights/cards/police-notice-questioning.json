@@ -1,0 +1,50 @@
+{
+  "id": "police-notice-questioning",
+  "title": "Called to the police station for questioning",
+  "category": "police",
+  "triggers": [
+    "police called me to the station",
+    "got a notice from police to appear",
+    "police want to question my mother at the station",
+    "thane bulaya hai"
+  ],
+  "rights": [
+    {
+      "act": "Bharatiya Nagarik Suraksha Sanhita, 2023",
+      "section": "s.35(3)–(6)",
+      "plain_explanation": "Where arrest isn't required, police issue a notice to appear instead. If you keep complying with the notice, you aren't arrested for that offence unless the officer records reasons.",
+      "source_url": "https://indiacode.nic.in/bitstream/123456789/20099/3/A2023-46.pdf",
+      "old_section": "CrPC s.41A"
+    },
+    {
+      "act": "Bharatiya Nagarik Suraksha Sanhita, 2023",
+      "section": "s.179",
+      "plain_explanation": "Women, boys under 15, men over 60, and people with a disability or acute illness can't be made to come to the station as witnesses. They're questioned where they live, unless they choose to go.",
+      "source_url": "https://indiacode.nic.in/bitstream/123456789/20099/3/A2023-46.pdf",
+      "old_section": "CrPC s.160"
+    }
+  ],
+  "do_now": [
+    "Ask for the notice in writing and keep a copy.",
+    "Go at the time given, ideally with a lawyer or a trusted person.",
+    "If you're a woman, a child or a senior, you can ask to be questioned at home."
+  ],
+  "user_at_fault_cases": [
+    "Ignoring a valid notice to appear can lead to arrest, so do respond to it."
+  ],
+  "escalation": [
+    {
+      "label": "Free legal aid",
+      "detail": "Call NALSA on 15100 or visit your District Legal Services Authority (DLSA) at the district court. Women, children, people in custody and people below the income limit get a free lawyer.",
+      "url": "https://nalsa.gov.in/services/legal-aid/eligibility"
+    }
+  ],
+  "helplines": [
+    {
+      "name": "NALSA free legal aid",
+      "number": "15100"
+    }
+  ],
+  "last_verified": "2026-11-19",
+  "emergency": false
+}

@@ -1,0 +1,49 @@
+{
+  "id": "helmet-violation",
+  "title": "Fined for riding without a helmet",
+  "category": "traffic",
+  "triggers": [
+    "fined for no helmet",
+    "police took my licence for helmet",
+    "helmet nahi pehna tha challan kat gaya",
+    "pillion without helmet fine"
+  ],
+  "rights": [
+    {
+      "act": "Motor Vehicles Act, 1988",
+      "section": "s.129",
+      "plain_explanation": "Everyone above four years of age riding or sitting on a two-wheeler must wear a helmet. A Sikh wearing a turban is exempt.",
+      "source_url": "https://indiacode.nic.in/bitstream/123456789/1798/1/A1988-59.pdf"
+    },
+    {
+      "act": "Motor Vehicles Act, 1988",
+      "section": "s.194D",
+      "plain_explanation": "Not wearing a helmet is fined ₹1,000, and the licence can be disqualified for three months.",
+      "source_url": "https://indiacode.nic.in/bitstream/123456789/1798/1/A1988-59.pdf"
+    },
+    {
+      "act": "Motor Vehicles Act, 1988",
+      "section": "s.206(4)",
+      "plain_explanation": "For a helmet offence, police may seize your licence to send for disqualification. They must give you a written acknowledgement.",
+      "source_url": "https://indiacode.nic.in/bitstream/123456789/1798/1/A1988-59.pdf"
+    }
+  ],
+  "do_now": [
+    "Accept the challan calmly; this one is lawful.",
+    "Ask for the official e-challan or receipt, and an acknowledgement if your licence is taken.",
+    "Pay online through the official challan and keep the receipt."
+  ],
+  "user_at_fault_cases": [
+    "Riding without a helmet, or carrying a pillion rider (above four years old) without one, is against the law. The fine and possible licence suspension are legal."
+  ],
+  "escalation": [
+    {
+      "label": "Pay the challan officially",
+      "detail": "Pay on the Virtual Courts portal or the method printed on the challan, never in cash without a receipt.",
+      "url": "https://vcourts.gov.in"
+    }
+  ],
+  "helplines": [],
+  "last_verified": "2026-11-19",
+  "emergency": false
+}

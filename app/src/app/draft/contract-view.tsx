@@ -1,12 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { contractFileName, type Contract } from "@/contracts/engine";
 
 // Shows the finished contract, with a plain-English explanation for every clause.
 export default function ContractView({ contract }: { contract: Contract }) {
   const [openId, setOpenId] = useState<string | null>(null);
   const [exporting, setExporting] = useState<"pdf" | "docx" | null>(null);
+
+  // Scroll down to the agreement when it's drafted.
+  const sectionRef = useRef<HTMLElement>(null);
+  useEffect(() => {
+    sectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [contract]);
 
   // The PDF and Word libraries are large, so they're only loaded when a button is clicked.
   async function download(kind: "pdf" | "docx") {
@@ -31,32 +37,31 @@ export default function ContractView({ contract }: { contract: Contract }) {
   }
 
   return (
-    <section className="mx-auto max-w-6xl px-4 pb-16 md:px-8">
-      <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm md:p-10">
-        <h2 className="text-center text-2xl font-semibold">{contract.title}</h2>
-        <p className="mt-1 text-center text-sm text-zinc-500">
-          Built from Sage&apos;s clause library. Click any clause for a plain-English explanation.
-        </p>
-
-        <div className="mt-4 flex justify-center gap-3">
-          <button
-            onClick={() => download("pdf")}
-            disabled={exporting !== null}
-            className="rounded-xl bg-zinc-900 px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
-          >
+    <section ref={sectionRef} className="mt-12 scroll-mt-24">
+      {/* Toolbar on the dark background */}
+      <div className="mb-5 flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <p className="kicker">Your agreement</p>
+          <p className="mt-1 text-sm text-ink-muted">
+            Built from Sage&apos;s clause library. Click “Explain” on any clause for plain English.
+          </p>
+        </div>
+        <div className="flex gap-3">
+          <button onClick={() => download("pdf")} disabled={exporting !== null} className="btn btn-primary">
             {exporting === "pdf" ? "Preparing…" : "Download PDF"}
           </button>
-          <button
-            onClick={() => download("docx")}
-            disabled={exporting !== null}
-            className="rounded-xl border border-zinc-300 px-4 py-2 text-sm font-medium disabled:opacity-50"
-          >
+          <button onClick={() => download("docx")} disabled={exporting !== null} className="btn btn-ghost">
             {exporting === "docx" ? "Preparing…" : "Download Word"}
           </button>
         </div>
+      </div>
+
+      {/* The contract itself, on a light "paper" sheet for easy reading */}
+      <div className="paper mx-auto max-w-4xl px-6 py-10 md:px-14 md:py-14">
+        <h2 className="text-center font-serif text-2xl font-semibold tracking-wide md:text-3xl">{contract.title}</h2>
 
         {contract.blanks.length > 0 && (
-          <div className="mt-6 rounded-lg bg-amber-50 p-4 text-sm text-amber-900">
+          <div className="mt-8 border-l-4 border-amber-400 bg-amber-50 p-4 text-sm text-amber-900">
             <p className="font-medium">Fill these in before signing:</p>
             <ul className="mt-1 list-disc pl-5">
               {contract.blanks.map((b) => (
@@ -66,7 +71,7 @@ export default function ContractView({ contract }: { contract: Contract }) {
           </div>
         )}
 
-        <ol className="mt-8 space-y-6">
+        <ol className="mt-10 space-y-7">
           {contract.clauses.map((clause) => {
             const open = openId === clause.id;
             return (
@@ -75,19 +80,19 @@ export default function ContractView({ contract }: { contract: Contract }) {
                   onClick={() => setOpenId(open ? null : clause.id)}
                   className="w-full text-left"
                 >
-                  <h3 className="font-semibold">
+                  <h3 className="font-serif text-[1.05rem] font-semibold">
                     {clause.number}. {clause.title}
-                    <span className="ml-2 text-xs font-normal text-blue-600">
-                      {open ? "Hide explanation" : "Explain"}
+                    <span className="ml-2 align-middle font-sans text-xs font-semibold uppercase tracking-wider text-blue-700">
+                      {open ? "Hide" : "Explain"}
                     </span>
                   </h3>
                 </button>
                 {open && (
-                  <p className="mt-2 rounded-lg bg-blue-50 p-3 text-sm text-blue-900">
+                  <p className="mt-2 border-l-4 border-blue-500 bg-blue-50 p-3 text-sm text-blue-950">
                     {clause.plainExplanation}
                   </p>
                 )}
-                <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-zinc-800">
+                <p className="mt-2 whitespace-pre-line font-serif text-[0.95rem] leading-relaxed text-zinc-800">
                   {highlightBlanks(clause.text)}
                 </p>
               </li>
@@ -95,7 +100,7 @@ export default function ContractView({ contract }: { contract: Contract }) {
           })}
         </ol>
 
-        <p className="mt-10 border-t border-zinc-200 pt-4 text-xs text-zinc-500">
+        <p className="mt-12 border-t border-zinc-300 pt-4 text-xs text-zinc-500">
           Generated by Sage. This is not legal advice. Have a lawyer review important contracts.
           Stamp duty rules vary by state.
         </p>

@@ -1,0 +1,52 @@
+{
+  "id": "deposit-not-returned",
+  "title": "Landlord won't return my security deposit",
+  "category": "tenant",
+  "triggers": [
+    "landlord not returning deposit",
+    "owner deducted my whole deposit",
+    "deposit wapas nahi kar raha makaan malik",
+    "moved out but no refund of advance"
+  ],
+  "rights": [
+    {
+      "act": "Indian Contract Act, 1872",
+      "section": "s.73",
+      "plain_explanation": "If your landlord breaks the rent agreement by keeping your deposit without reason, you can claim the money and compensation for the loss it causes.",
+      "source_url": "https://indiacode.nic.in/bitstream/123456789/2187/2/A187209.pdf"
+    }
+  ],
+  "do_now": [
+    "Find your rent agreement and check what it says about the deposit and deductions.",
+    "Ask the landlord in writing (WhatsApp or email is fine) for the refund, with a clear deadline.",
+    "Collect proof: payment receipts, move-out photos, key handover messages.",
+    "If they claim damage, ask for an itemised list with bills."
+  ],
+  "user_at_fault_cases": [
+    "Unpaid rent, unpaid bills or real damage beyond normal wear can be lawfully deducted if the agreement allows it."
+  ],
+  "escalation": [
+    {
+      "label": "Legal notice",
+      "detail": "A written legal notice (free through legal aid) often settles it."
+    },
+    {
+      "label": "Rent authority or civil court",
+      "detail": "Depending on your state, file with the Rent Authority or the civil court for a money claim."
+    },
+    {
+      "label": "Free legal aid",
+      "detail": "Call NALSA on 15100 or visit your District Legal Services Authority (DLSA) at the district court. Women, children, people in custody and people below the income limit get a free lawyer.",
+      "url": "https://nalsa.gov.in/services/legal-aid/eligibility"
+    }
+  ],
+  "helplines": [
+    {
+      "name": "NALSA free legal aid",
+      "number": "15100"
+    }
+  ],
+  "notes": "There's no single national rule on deposit refunds; state rent laws and your agreement decide the details.",
+  "last_verified": "2026-11-19",
+  "emergency": false
+}

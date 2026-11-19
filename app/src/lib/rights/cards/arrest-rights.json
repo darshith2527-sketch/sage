@@ -1,0 +1,92 @@
+{
+  "id": "arrest-rights",
+  "title": "Arrested or about to be arrested",
+  "category": "police",
+  "triggers": [
+    "police are arresting my brother",
+    "I've been arrested what are my rights",
+    "police took my father to the station",
+    "giraftar kar liya",
+    "can police arrest without telling the reason"
+  ],
+  "rights": [
+    {
+      "act": "Constitution of India",
+      "section": "Art. 22(1)",
+      "plain_explanation": "You must be told why you're being arrested, and you have the right to consult and be defended by a lawyer of your choice.",
+      "source_url": "https://eparlib.sansad.in/bitstream/123456789/2982247/1/29-05-27_Constitution_English_Final.pdf"
+    },
+    {
+      "act": "Constitution of India",
+      "section": "Art. 22(2)",
+      "plain_explanation": "You must be produced before the nearest magistrate within 24 hours of arrest, not counting travel time.",
+      "source_url": "https://eparlib.sansad.in/bitstream/123456789/2982247/1/29-05-27_Constitution_English_Final.pdf"
+    },
+    {
+      "act": "Bharatiya Nagarik Suraksha Sanhita, 2023",
+      "section": "s.47",
+      "plain_explanation": "When arrested without a warrant, you must be told the full grounds right away, and, for a bailable offence, that you're entitled to bail.",
+      "source_url": "https://indiacode.nic.in/bitstream/123456789/20099/3/A2023-46.pdf",
+      "old_section": "CrPC s.50"
+    },
+    {
+      "act": "Bharatiya Nagarik Suraksha Sanhita, 2023",
+      "section": "s.48",
+      "plain_explanation": "Police must immediately inform a relative or friend you name about the arrest and where you're held.",
+      "source_url": "https://indiacode.nic.in/bitstream/123456789/20099/3/A2023-46.pdf",
+      "old_section": "CrPC s.50A"
+    },
+    {
+      "act": "Bharatiya Nagarik Suraksha Sanhita, 2023",
+      "section": "s.36",
+      "plain_explanation": "The arresting officer must wear a clear name tag and prepare an arrest memo, signed by a witness and by you.",
+      "source_url": "https://indiacode.nic.in/bitstream/123456789/20099/3/A2023-46.pdf",
+      "old_section": "CrPC s.41B"
+    },
+    {
+      "act": "Bharatiya Nagarik Suraksha Sanhita, 2023",
+      "section": "s.38",
+      "plain_explanation": "During interrogation you may meet a lawyer of your choice (though not for the whole interrogation).",
+      "source_url": "https://indiacode.nic.in/bitstream/123456789/20099/3/A2023-46.pdf",
+      "old_section": "CrPC s.41D"
+    },
+    {
+      "act": "Constitution of India",
+      "section": "Art. 20(3)",
+      "plain_explanation": "No one accused of an offence can be forced to be a witness against themselves.",
+      "source_url": "https://eparlib.sansad.in/bitstream/123456789/2982247/1/29-05-27_Constitution_English_Final.pdf"
+    }
+  ],
+  "do_now": [
+    "Stay calm and don't resist; resisting gives police more powers.",
+    "Ask politely: \"What are the grounds for my arrest?\" and \"Is this offence bailable?\"",
+    "Give the name and number of a family member to be informed.",
+    "Read the arrest memo before signing it, and ask for a lawyer."
+  ],
+  "user_at_fault_cases": [
+    "If there's a valid warrant or a genuine case, the arrest itself can be lawful. Your rights are about how it's done, not about avoiding it."
+  ],
+  "escalation": [
+    {
+      "label": "Lawyer or free legal aid",
+      "detail": "Anyone in custody is entitled to free legal aid. Ask for the legal aid lawyer at the police station or court, or call 15100.",
+      "url": "https://nalsa.gov.in/services/legal-aid/eligibility"
+    },
+    {
+      "label": "Magistrate",
+      "detail": "Tell the magistrate when produced if your rights weren't followed. The magistrate must check this."
+    }
+  ],
+  "helplines": [
+    {
+      "name": "Emergency (police, fire, ambulance)",
+      "number": "112"
+    },
+    {
+      "name": "NALSA free legal aid",
+      "number": "15100"
+    }
+  ],
+  "last_verified": "2026-11-19",
+  "emergency": false
+}

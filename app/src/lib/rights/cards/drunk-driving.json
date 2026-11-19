@@ -1,0 +1,55 @@
+{
+  "id": "drunk-driving",
+  "title": "Stopped for a breath test (drink-driving)",
+  "category": "traffic",
+  "triggers": [
+    "police asking me to take a breath test",
+    "caught drunk driving",
+    "breathalyser test refused",
+    "peeke gaadi chala raha tha police ne pakda"
+  ],
+  "rights": [
+    {
+      "act": "Motor Vehicles Act, 1988",
+      "section": "s.185",
+      "plain_explanation": "Driving with more than 30 mg of alcohol per 100 ml of blood, as measured by a breath analyser, is an offence. A first offence can mean up to six months in jail, a ₹10,000 fine, or both.",
+      "source_url": "https://indiacode.nic.in/bitstream/123456789/1798/1/A1988-59.pdf"
+    },
+    {
+      "act": "Motor Vehicles Act, 1988",
+      "section": "s.203",
+      "plain_explanation": "A police officer in uniform can ask you for a breath test if they suspect drink-driving. If you refuse and they suspect alcohol, they may arrest you without a warrant.",
+      "source_url": "https://indiacode.nic.in/bitstream/123456789/1798/1/A1988-59.pdf"
+    },
+    {
+      "act": "Motor Vehicles Act, 1988",
+      "section": "s.206(4)",
+      "plain_explanation": "For drink-driving, police may seize your licence to send for disqualification, with a written acknowledgement.",
+      "source_url": "https://indiacode.nic.in/bitstream/123456789/1798/1/A1988-59.pdf"
+    }
+  ],
+  "do_now": [
+    "Cooperate with the breath test; refusing makes it worse.",
+    "Don't drive any further. Ask a sober friend, or use a cab.",
+    "Ask for the official challan and an acknowledgement if your licence is taken.",
+    "If you're arrested, your arrest rights apply: ask for the grounds and tell a family member."
+  ],
+  "user_at_fault_cases": [
+    "If you drove after drinking above the limit, the law is against you. The challan, licence seizure and court case are lawful. Sage won't help you avoid or beat a breath test."
+  ],
+  "escalation": [
+    {
+      "label": "Free legal aid",
+      "detail": "Call NALSA on 15100 or visit your District Legal Services Authority (DLSA) at the district court. Women, children, people in custody and people below the income limit get a free lawyer.",
+      "url": "https://nalsa.gov.in/services/legal-aid/eligibility"
+    }
+  ],
+  "helplines": [
+    {
+      "name": "NALSA free legal aid",
+      "number": "15100"
+    }
+  ],
+  "last_verified": "2026-11-19",
+  "emergency": false
+}

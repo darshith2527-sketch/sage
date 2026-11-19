@@ -1,0 +1,66 @@
+{
+  "id": "traffic-stop-documents",
+  "title": "Stopped by traffic police and asked for documents",
+  "category": "traffic",
+  "triggers": [
+    "traffic police stopped me and asked for licence",
+    "cop asking for RC and insurance",
+    "I don't have my licence with me",
+    "police ne gaadi roki documents maang rahe hain",
+    "is DigiLocker licence valid"
+  ],
+  "rights": [
+    {
+      "act": "Motor Vehicles Act, 1988",
+      "section": "s.130(1)",
+      "plain_explanation": "You must show your driving licence when a police officer in uniform asks for it in a public place.",
+      "source_url": "https://indiacode.nic.in/bitstream/123456789/1798/1/A1988-59.pdf"
+    },
+    {
+      "act": "Motor Vehicles Act, 1988",
+      "section": "s.130",
+      "plain_explanation": "If a document isn't with you, the law lets you produce copies within fifteen days of the demand.",
+      "source_url": "https://indiacode.nic.in/bitstream/123456789/1798/1/A1988-59.pdf"
+    },
+    {
+      "act": "Central Motor Vehicles Rules, 1989",
+      "section": "r.139 (amended 2018)",
+      "plain_explanation": "Your licence and RC in DigiLocker or mParivahan count as valid, the same as the paper originals. Officers can verify them on the app.",
+      "source_url": "https://morth.gov.in/sites/default/files/circulars_document/Standard_Operating_Procedure.pdf"
+    }
+  ],
+  "do_now": [
+    "Pull over safely and stay polite.",
+    "Show your licence and RC in DigiLocker or mParivahan if you don't have paper copies.",
+    "If there's a fine, ask for an official e-challan or a printed receipt. Don't hand over cash without one.",
+    "Note the officer's name and the time and place."
+  ],
+  "user_at_fault_cases": [
+    "Driving with no licence at all (not even digitally): a challan is lawful. Pay it through the official challan and keep the receipt.",
+    "An expired document can also be challaned. Renew it and pay the fine officially."
+  ],
+  "escalation": [
+    {
+      "label": "Check or contest the challan",
+      "detail": "Every e-challan appears on the Virtual Courts portal. You can pay it there or choose to contest it.",
+      "url": "https://vcourts.gov.in"
+    },
+    {
+      "label": "Free legal aid",
+      "detail": "Call NALSA on 15100 or visit your District Legal Services Authority (DLSA) at the district court. Women, children, people in custody and people below the income limit get a free lawyer.",
+      "url": "https://nalsa.gov.in/services/legal-aid/eligibility"
+    }
+  ],
+  "helplines": [
+    {
+      "name": "Emergency (police, fire, ambulance)",
+      "number": "112"
+    },
+    {
+      "name": "NALSA free legal aid",
+      "number": "15100"
+    }
+  ],
+  "last_verified": "2026-11-19",
+  "emergency": false
+}

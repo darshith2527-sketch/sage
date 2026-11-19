@@ -1,0 +1,41 @@
+{
+  "id": "no-bill-cash-only",
+  "title": "Asked to pay cash with no bill or receipt",
+  "category": "consumer",
+  "triggers": [
+    "shop won't give a bill",
+    "asked to pay cash no receipt",
+    "bill nahi de raha",
+    "pay cash and we won't add GST"
+  ],
+  "rights": [
+    {
+      "act": "Consumer Protection Act, 2019",
+      "section": "s.2(47)(vii)",
+      "plain_explanation": "Not issuing a bill, cash memo or receipt for goods sold or services given is an unfair trade practice.",
+      "source_url": "https://www.indiacode.nic.in/bitstream/123456789/18964/1/cpa.pdf"
+    }
+  ],
+  "do_now": [
+    "Politely ask for a proper bill before paying.",
+    "Pay by UPI or card where you can, so there's a record.",
+    "If they refuse, you can buy elsewhere or report them."
+  ],
+  "user_at_fault_cases": [],
+  "escalation": [
+    {
+      "label": "National Consumer Helpline",
+      "detail": "Report the seller on 1915.",
+      "url": "https://consumerhelpline.gov.in"
+    }
+  ],
+  "helplines": [
+    {
+      "name": "National Consumer Helpline",
+      "number": "1915"
+    }
+  ],
+  "notes": "If someone in an official role (like a traffic officer) asks for cash without a receipt, ask for the official challan instead.",
+  "last_verified": "2026-11-19",
+  "emergency": false
+}
