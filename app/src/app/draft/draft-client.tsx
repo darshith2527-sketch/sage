@@ -85,7 +85,7 @@ export default function DraftClient({ typeId }: { typeId: string }) {
   return (
     <main className="mx-auto w-full max-w-6xl px-4 pb-16 pt-24 md:px-8 md:pt-28">
       <div className="mb-6">
-        <Link href="/#draft" className="kicker hover:text-ink">
+        <Link href="/draft" className="kicker hover:text-ink">
           ← All agreements
         </Link>
         <h1 className="display extrude mt-2 text-5xl font-[800] text-ink md:text-6xl">{type.name}</h1>

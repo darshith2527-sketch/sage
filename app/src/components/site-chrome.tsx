@@ -6,14 +6,17 @@ import { useEffect, useRef, type ReactNode } from "react";
 import { SOCIAL_LINKS } from "@/lib/site";
 import ParticleScene from "./particle-scene";
 
-// The 3D background: a calm particle ocean. (The home page's opening screen draws its own scene on top.)
+// The 3D background: a calm particle ocean. The home page is its own full-screen 3D journey,
+// so it gets no backdrop (and no footer: its last stage holds the social links).
 export function Backdrop() {
+  const pathname = usePathname();
+  if (pathname === "/") return null;
   return <ParticleScene variant="ambient" />;
 }
 
 const LINKS = [
   { href: "/", label: "Home", match: (p: string) => p === "/" },
-  { href: "/#draft", label: "Draft", match: (p: string) => p.startsWith("/draft") },
+  { href: "/draft", label: "Draft", match: (p: string) => p.startsWith("/draft") },
   { href: "/review", label: "Review", match: (p: string) => p.startsWith("/review") },
   { href: "/rights", label: "Rights", match: (p: string) => p.startsWith("/rights") },
 ];
@@ -99,7 +102,9 @@ const SOCIAL_ICONS: Record<(typeof SOCIAL_LINKS)[number]["label"], ReactNode> = 
 
 // The end of every page: the wordmark, links, social profiles and the disclaimer.
 export function SiteFooter() {
+  const pathname = usePathname();
   const links = SOCIAL_LINKS.filter((l) => l.href);
+  if (pathname === "/") return null;
   return (
     <footer className="relative z-10 mt-auto border-t border-line/60 bg-[rgba(3,10,26,0.6)] backdrop-blur-md">
       <div className="mx-auto grid max-w-6xl gap-10 px-5 py-14 md:grid-cols-[1.4fr_1fr_1fr] md:px-8">
@@ -116,7 +121,7 @@ export function SiteFooter() {
           <p className="kicker">Explore</p>
           <ul className="mt-4 space-y-2">
             {[
-              ["Draft an agreement", "/#draft"],
+              ["Draft an agreement", "/draft"],
               ["Review an agreement", "/review"],
               ["Know your rights", "/rights"],
               ["Freelance agreement", "/draft/freelance"],

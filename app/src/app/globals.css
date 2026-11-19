@@ -1,11 +1,22 @@
 @import "tailwindcss";
 
-/* Excon Bold (Fontshare, ITF Free Font License) for the hero wordmark, served from /public/fonts */
+/* Excon (Fontshare, ITF Free Font License): the home journey's typeface, served from /public/fonts */
 @font-face {
   font-family: "Excon";
   src: url("/fonts/Excon-Bold.woff2") format("woff2");
   font-weight: 700;
-  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Excon";
+  src: url("/fonts/Excon-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Excon";
+  src: url("/fonts/Excon-Regular.woff2") format("woff2");
+  font-weight: 400;
   font-display: swap;
 }
 
@@ -312,26 +323,52 @@ input[type="file"].field::file-selector-button {
 }
 }
 
-/* ---------- Home: cosmic hero ---------- */
-.cosmic-hero {
-  background:
-    radial-gradient(60% 18% at 50% 49%, rgba(40, 60, 160, 0.45), transparent 70%),
-    linear-gradient(180deg, #0e1d4c 0%, #0c1a44 55%, #050d22 100%);
+/* ---------- Home: the 3D journey ---------- */
+.journey {
+  background: #030915;
+  touch-action: none;
+  overscroll-behavior: none;
 }
-/* The heading as text, shown only until (or unless) WebGL draws it. */
-.cosmic-title {
-  transform: translateY(-50%);
+/* Opening-screen controls fade as you travel in, and are gone after the opening stage. */
+.journey-home {
+  opacity: clamp(0, calc(1 - var(--home-p, 0) * 4), 1);
+  transition:
+    opacity 0.25s ease,
+    visibility 0.25s;
+}
+.journey:not([data-stage="home"]) .journey-home {
+  opacity: 0;
+  visibility: hidden;
+}
+.journey-hint {
+  font-family: "Excon", "Helvetica Neue", Arial, sans-serif;
+  font-weight: 500;
+  font-size: 0.82rem;
+  color: rgba(127, 154, 216, 0.85);
+}
+/* Invisible links laid over the 3D discs and buttons (positioned by the engine). */
+.journey-spot {
+  position: absolute;
+  left: 0;
+  top: 0;
+  border-radius: 9999px;
+  visibility: hidden;
+  cursor: pointer;
+}
+.journey-spot:focus-visible {
+  outline: 2px solid #6bb8ff;
+  outline-offset: 4px;
+}
+/* Plain-HTML version, shown only when WebGL is unavailable. */
+.journey[data-webgl="on"] .journey-fallback {
+  display: none;
+}
+.cosmic-title-static {
   font-family: "Excon", "Arial Black", sans-serif;
   font-weight: 700;
-  text-transform: uppercase;
-  font-size: clamp(5.4rem, 9.3vw, 11rem);
+  font-size: clamp(4rem, 12vw, 9rem);
   line-height: 1;
-  letter-spacing: 0.025em;
   color: #2c3f95;
-  text-shadow: 0 0 40px rgba(70, 100, 230, 0.45);
-}
-.cosmic-hero[data-webgl="on"] .cosmic-title {
-  opacity: 0;
 }
 
 /* Thin outlined frame with two cut corners, used by the nav and the hero button. */
