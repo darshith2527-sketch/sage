@@ -1,26 +1,278 @@
 @import "tailwindcss";
 
+/* ---------- Sage design system ----------
+   Dark navy space, glowing blue particles, see-through "HUD" glass panels with
+   cut corners, tall condensed headings. Legal text sits on a light "paper" sheet. */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --navy-950: #030a1a;
+  --navy-900: #061230;
+  --navy-800: #0b1d46;
+  --panel: rgba(14, 34, 82, 0.5);
+  --panel-strong: rgba(14, 34, 82, 0.78);
+  --line: rgba(110, 160, 255, 0.38);
+  --line-strong: rgba(130, 180, 255, 0.75);
+  --glow: #5b9dff;
+  --accent: #7fb2ff;
+  --ink: #e4ecff;
+  --ink-muted: #9db0d8;
+  --ink-faint: #6c7fa8;
+  --paper: #f7f8fb;
+  --paper-ink: #1a2133;
+  --high: #ff7b8a;
+  --medium: #ffc46b;
+  --low: #9db0d8;
+  --ok: #6fe3b0;
+  --cut: 14px; /* size of the cut corners */
+  /* Fonts are bundled from npm (see layout.tsx) */
+  --font-display-face: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --font-body-face: "Mulish Variable", system-ui, sans-serif;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-background: var(--navy-950);
+  --color-foreground: var(--ink);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-ink-faint: var(--ink-faint);
+  --color-accent: var(--accent);
+  --color-glow: var(--glow);
+  --color-line: var(--line);
+  --color-paper: var(--paper);
+  --color-paper-ink: var(--paper-ink);
+  --color-high: var(--high);
+  --color-medium: var(--medium);
+  --color-low: var(--low);
+  --color-ok: var(--ok);
+  --font-sans: var(--font-body-face);
+  --font-display: var(--font-display-face);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  background: var(--navy-950);
+  color-scheme: dark;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: radial-gradient(120% 80% at 50% 0%, var(--navy-800) 0%, var(--navy-900) 45%, var(--navy-950) 100%)
+    fixed;
+  color: var(--ink);
+  font-family: var(--font-body-face);
+}
+
+::selection {
+  background: rgba(91, 157, 255, 0.4);
+}
+
+/* Tall, condensed, uppercase headings */
+.display {
+  font-family: var(--font-display-face);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+
+/* ---------- HUD glass panel ----------
+   The panel is clipped to a shape with two cut corners. The outer layer draws the
+   border; ::before fills the inside, 1px smaller. */
+.hud {
+  position: relative;
+  isolation: isolate;
+  background: var(--line);
+  clip-path: polygon(
+    var(--cut) 0,
+    100% 0,
+    100% calc(100% - var(--cut)),
+    calc(100% - var(--cut)) 100%,
+    0 100%,
+    0 var(--cut)
+  );
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.hud::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  z-index: -1;
+  background: linear-gradient(160deg, rgba(40, 80, 170, 0.32), var(--panel) 45%, rgba(6, 18, 48, 0.72));
+  clip-path: polygon(
+    calc(var(--cut) - 0.5px) 0,
+    100% 0,
+    100% calc(100% - var(--cut) + 0.5px),
+    calc(100% - var(--cut) + 0.5px) 100%,
+    0 100%,
+    0 calc(var(--cut) - 0.5px)
+  );
+}
+.hud-strong::before {
+  background: linear-gradient(160deg, rgba(40, 80, 170, 0.45), var(--panel-strong) 45%, rgba(6, 18, 48, 0.9));
+}
+a.hud,
+button.hud {
+  transition:
+    background 0.25s,
+    transform 0.25s;
+}
+a.hud:hover,
+button.hud:hover {
+  background: var(--line-strong);
+  transform: translateY(-2px);
+}
+
+/* Small label above a heading, e.g. "01 / Draft" */
+.kicker {
+  font-family: var(--font-display-face);
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.75rem;
+  color: var(--accent);
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.4rem;
+  font-family: var(--font-display-face);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.95rem;
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+  transition:
+    background 0.2s,
+    color 0.2s,
+    opacity 0.2s;
+}
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.btn-primary {
+  background: linear-gradient(180deg, #6aa6ff, #3d7be8);
+  color: #04102c;
+  font-weight: 600;
+}
+.btn-primary:not(:disabled):hover {
+  background: linear-gradient(180deg, #8bbaff, #5590f5);
+}
+.btn-ghost {
+  background: rgba(91, 157, 255, 0.12);
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+.btn-ghost:not(:disabled):hover {
+  background: rgba(91, 157, 255, 0.24);
+}
+
+/* ---------- Form fields ---------- */
+.field {
+  width: 100%;
+  background: rgba(3, 10, 26, 0.55);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  padding: 0.7rem 0.9rem;
+  font-size: 0.9rem;
+  outline: none;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+.field::placeholder {
+  color: var(--ink-faint);
+}
+.field:focus {
+  border-color: var(--glow);
+  box-shadow: 0 0 0 3px rgba(91, 157, 255, 0.2);
+}
+.field:disabled {
+  opacity: 0.45;
+}
+input[type="file"].field::file-selector-button {
+  margin-right: 0.8rem;
+  border: 0;
+  padding: 0.4rem 0.8rem;
+  background: rgba(91, 157, 255, 0.2);
+  color: var(--ink);
+  font-family: var(--font-display-face);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+}
+
+/* Keyboard focus is always visible */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ---------- Severity badges ---------- */
+.badge {
+  font-family: var(--font-display-face);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.72rem;
+  padding: 0.15rem 0.5rem;
+  border: 1px solid currentColor;
+}
+.badge-high {
+  color: var(--high);
+  background: rgba(255, 123, 138, 0.1);
+}
+.badge-medium {
+  color: var(--medium);
+  background: rgba(255, 196, 107, 0.1);
+}
+.badge-low {
+  color: var(--low);
+  background: rgba(157, 176, 216, 0.1);
+}
+
+/* ---------- Paper: the contract itself ---------- */
+.paper {
+  background: var(--paper);
+  color: var(--paper-ink);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.6),
+    0 30px 80px -20px rgba(0, 0, 0, 0.7),
+    0 0 60px -10px rgba(91, 157, 255, 0.35);
+}
+
+/* Panels fade and lift in as they scroll into view (see Reveal). */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px) perspective(900px) rotateX(6deg);
+  transition:
+    opacity 0.9s ease,
+    transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Thin scrollbars that suit the dark theme */
+.scroll-thin {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(110, 160, 255, 0.35) transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* A light sweeping across a progress track while Sage works */
+@keyframes scan {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(300%);
+  }
 }
